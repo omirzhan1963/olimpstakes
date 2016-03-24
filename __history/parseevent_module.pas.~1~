@@ -1,0 +1,320 @@
+unit parseevent_module;
+
+interface
+  uses
+   SysUtils, Variants, Classes, SHDocVw,mshtml, workwithdb_module, globalfunc,
+  olimpbase_module,RegularExpressions;
+   type
+   staketemp=record
+     sttype:string;
+     stval:string;
+
+
+   end;
+   stakestemp=array of staketemp;
+   parseevent_class=class(olimpbase_class)
+    procedure parse;
+    private
+    id_sport,id_champ,id_event:integer;
+    id_com1,id_com2:integer;
+    id_stakegroup:integer;
+    olimpdate:string;
+    sts:stakestemp;
+    com1,com2:string;
+    odate:string;
+    procedure parsemc(tr:ihtmlelement);
+      procedure parsehi(tr:ihtmlelement);
+     procedure parsetr (tr:ihtmlelement);
+     procedure parsenobr(nbr:ihtmlelement);
+    procedure insertstakeindb;
+    procedure parseinnerb(s:string);
+    procedure parseeventstr(s:string);
+   end;
+implementation
+  function isolimpdate(s:string):boolean;
+  begin
+    result:=false;
+    if length(s)<>16 then exit;
+
+    if not isdigit(s[1]) then  exit;
+     if not isdigit(s[2]) then  exit;
+      if s[3]<>'.' then  exit;
+
+       if not isdigit(s[4]) then  exit;
+      if not isdigit(s[5]) then  exit;
+          if s[6]<>'.' then  exit;
+         if not isdigit(s[7]) then  exit;
+        if not isdigit(s[8]) then  exit;
+         if not isdigit(s[9]) then  exit;
+           if not isdigit(s[10]) then  exit;
+              if s[11]<>' ' then  exit;
+          if not isdigit(s[12]) then  exit;
+           if not isdigit(s[13]) then  exit;
+                 if s[14]<>':' then  exit;
+            if not isdigit(s[15]) then  exit;
+             if not isdigit(s[16]) then  exit;
+             result:=true;
+  end;
+  function transformdate(s:string):string;
+  begin
+
+    result:=copy(s,7,4)+'-'+copy(s,4,2)+'-'+copy(s,1,2)+' '+copy(s,12,5)+':00.000';
+
+  end;
+
+{ parseevent_class }
+
+procedure parseevent_class.insertstakeindb;
+var
+i,id_staketype:integer;
+sqlstr,st,sv:string;
+begin
+ if length(sts)=0 then exit;
+  st:=sts[0].sttype;
+      st:=stringreplace(st,'''','$$$',[rfreplaceall]);
+    st:=stringreplace(st,com1,'com1',[rfreplaceall]);
+     st:=stringreplace(st,com2,'com2',[rfreplaceall]);
+  sv:=sts[0].stval;
+  sqlstr:='findstaketype N'''+st+''','+inttostr(id_sport)+','+inttostr(id_stakegroup)+';';
+  id_staketype:=wwdb.oneinteger(sqlstr);
+  sqlstr:='insertstakes '+inttostr(id_event)+','+inttostr(id_staketype)+','+sv+';';
+  wwdb.setval(sqlstr);
+  for I := 1 to length(sts)-1 do
+   begin
+     st:=st+'@@@'+sts[i].sttype;
+     st:= stringreplace(st,'''','$$$',[rfreplaceall]);
+   st:= stringreplace(st,com1,'com1',[rfreplaceall]);
+   st:=  stringreplace(st,com2,'com2',[rfreplaceall]);
+  sv:=sts[i].stval;
+  sqlstr:='findstaketype N'''+st+''','+inttostr(id_sport)+','+inttostr(id_stakegroup)+';';
+  id_staketype:=wwdb.oneinteger(sqlstr);
+  sqlstr:='insertstakes '+inttostr(id_event)+','+inttostr(id_staketype)+','+sv+';';
+  wwdb.setval(sqlstr);
+   end;
+
+end;
+
+procedure parseevent_class.parse;
+var
+at:attrs;
+ trs,tds,inputs:ihtmlelementcollection;
+ tr,td,inp:ihtmlelement;
+ i,j,champind:integer;
+ sqlstr:string;
+begin
+
+doc:=wb.Document as ihtmldocument2;
+  setlength(at,1);
+  at[0].name:='name';
+  at[0].value:='BetLine';
+  findform(at);
+  if not assigned(form) then exit;
+  trs:=form.all as ihtmlelementcollection;
+  trs:=trs.tags('TR')as ihtmlelementcollection;
+  for I := 0 to trs.length-1 do
+    begin
+      tr:=trs.item(i,0) as ihtmlelement;
+      if tr.className='m_c' then
+      begin
+        parsemc(tr);
+if error>90 then exit;
+
+        continue;
+      end;
+       if tr.className='hi' then
+      begin
+        parsehi(tr);
+if error>90 then exit;
+
+        continue;
+      end;
+      parsetr(tr);
+    end;
+end;
+
+procedure parseevent_class.parseeventstr(s: string);
+var
+rg,rg1:tregex;
+mch:tmatch;
+gr:tgroup;
+sqlstr:string;
+begin
+ rg:=tregex.Create('(.*?)\s\-\s');
+ rg1:=tregex.Create('\s\-\s(.*)');
+ if rg.IsMatch(s) then
+  begin
+    mch:=rg.Match(s);
+    gr:=mch.Groups[1];
+    com1:=gr.Value;
+    com1:=trim(com1);
+    com1:=stringreplace(com1,'''','$$$',[rfreplaceall]);
+    sqlstr:='findcom N'''+com1+''','+inttostr(id_sport)+','+inttostr(id_champ)+';';
+    id_com1:=wwdb.oneinteger(sqlstr);
+  end
+  else error:=101;
+  if error>90 then exit;
+   if rg1.IsMatch(s) then
+  begin
+    mch:=rg1.Match(s);
+    gr:=mch.Groups[1];
+    com2:=gr.Value;
+    com2:=trim(com2);
+    com2:=stringreplace(com2,'''','$$$',[rfreplaceall]);
+    sqlstr:='findcom N'''+com2+''','+inttostr(id_sport)+','+inttostr(id_champ)+';';
+    id_com2:=wwdb.oneinteger(sqlstr);
+  end
+  else error:=101;
+  if error>90 then exit;
+  sqlstr:='findevent N'''+odate+''','+inttostr(id_com1)+','+inttostr(id_com2)+','+inttostr(id_champ)+';';
+  id_event:=wwdb.oneinteger(sqlstr);
+
+
+  end;
+
+procedure parseevent_class.parsehi(tr: ihtmlelement);
+var
+i:integer;
+tds,atags:ihtmlelementcollection;
+td,a:ihtmlelement;
+ s,sqlstr:string;
+
+begin
+tds:=tr.all as ihtmlelementcollection;
+tds:=tds.tags('TD')   as  ihtmlelementcollection;
+td:=tds.item(0,0) as ihtmlelement;
+atags:=td.all as ihtmlelementcollection;
+atags:=atags.tags('A')  as ihtmlelementcollection;
+if atags.length=1 then
+  begin
+    a:=atags.item(0,0) as ihtmlelement;
+    a.click;
+    wait(1000);
+  end;
+s:=td.innerText;
+s:=trim(s);
+if not isolimpdate(s) then  error:=100;
+if error>90 then exit;
+ odate:=transformdate(s);
+ td:=tds.item(1,0) as ihtmlelement;
+s:=td.innerText;
+s:=trim(s);
+parseeventstr(s);
+end;
+
+procedure parseevent_class.parseinnerb(s: string);
+var
+sqlstr:string;
+begin
+ sqlstr:='findstakegroup N'''+s+''','+inttostr(id_sport)+';';
+ id_stakegroup:=wwdb.oneinteger(sqlstr);
+end;
+
+procedure parseevent_class.parsemc(tr: ihtmlelement);
+var
+s,sqlstr:string;
+br:string;
+i:integer;
+begin
+ s:=tr.innerText;
+  br:=char(10)+char(13);
+  i:=pos(br,s);
+  if i>0 then  s:=copy(s,1,i-1);
+  s:=trim(s);
+  i:=pos('.',s);
+  sqlstr:=copy(s,1,i-1);
+  sqlstr:=trim(sqlstr);
+  sqlstr:='findsport N'''+sqlstr+''';';
+  id_sport:=wwdb.oneinteger(sqlstr);
+   sqlstr:=copy(s,i+1,1000);
+    sqlstr:=trim(sqlstr);
+  sqlstr:='findchamp N'''+sqlstr+''','+inttostr(id_sport)+';';
+
+  id_champ:=wwdb.oneinteger(sqlstr);
+
+end;
+
+procedure parseevent_class.parsenobr(nbr: ihtmlelement);
+var
+s,sqlstr,sttype,stval:string;
+i,j:integer;
+rg,rg1:tregex;
+mch:tmatch;
+gr:tgroup;
+id_staketype:integer;
+begin
+  s:=nbr.innerHTML;
+  setlength(sts,0);
+
+  rg:=tregex.Create('(.*?)<(input|INPUT).*?>');
+  rg1:=tregex.Create('<(b|B)>(.*?)</(b|B)>');
+  while length(s)>0 do
+    begin
+  if rg.IsMatch(s) then
+   begin
+     mch:=rg.Match(s);
+     gr:=mch.Groups[1];
+     sttype:=gr.Value;
+     sttype:=trim(sttype);
+
+     i:=mch.Index;
+     j:=mch.Length+i-1;
+     delete(s,1,j);
+   end
+   else
+   exit;
+   if rg1.IsMatch(s) then
+   begin
+     mch:=rg1.Match(s);
+     gr:=mch.Groups[2];
+     stval:=gr.Value;
+    stval:=trim(stval);
+
+     i:=mch.Index;
+     j:=mch.Length+i-1;
+     delete(s,1,j);
+   end
+   else
+   exit;
+   i:=length(sts)+1;
+   setlength(sts,i);
+   i:=i-1;
+   j:=pos('&nbsp;',sttype);
+   if j>0 then
+    delete(sttype,1,j+5);
+
+   sts[i].sttype:=sttype;
+   sts[i].stval:=stval
+    end;
+
+end;
+
+procedure parseevent_class.parsetr(tr: ihtmlelement);
+var
+ tbls,els:ihtmlelementcollection;
+el:ihtmlelement;
+i:integer;
+s:string;
+begin
+   els:=tr.all as ihtmlelementcollection;
+   tbls:=els.tags('TABLE')    as ihtmlelementcollection;
+   if tbls.length>0 then  exit;
+
+   parseinnerb('main');
+  for I := 0 to  els.length-1 do
+   begin
+     el:= els.item(i,0)as ihtmlelement;
+     if ((el.tagName='B') and (el.parentElement.tagName<>'NOBR')) then
+     begin
+       s:=el.innerText;
+       parseinnerb(s);
+     end;
+      if el.tagName='NOBR' then
+       begin
+     parsenobr(el);
+     if length(sts)>0 then insertstakeindb;
+       end;
+
+   end;
+end;
+
+end.

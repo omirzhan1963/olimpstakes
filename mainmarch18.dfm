@@ -76,6 +76,15 @@ object Form1: TForm1
     TabOrder = 5
     OnClick = Button4Click
   end
+  object Button5: TButton
+    Left = 72
+    Top = 400
+    Width = 75
+    Height = 25
+    Caption = 'Button5'
+    TabOrder = 6
+    OnClick = Button5Click
+  end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer

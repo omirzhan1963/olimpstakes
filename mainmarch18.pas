@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, OleCtrls, SHDocVw, StdCtrls, ExtCtrls, login_module, globalfunc,
-  navsport_module, navchamp_module, parseevent_module;
+  navsport_module, navchamp_module, parseevent_module, insertstake_module;
 
 type
   TForm1 = class(TForm)
@@ -16,6 +16,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    Button5: TButton;
     procedure WebBrowser1NewWindow2(ASender: TObject; var ppDisp: IDispatch;
       var Cancel: WordBool);
     procedure Button1Click(Sender: TObject);
@@ -23,6 +24,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
 
   private
    incl:init_class;
@@ -118,6 +120,22 @@ begin
 ps:=parseevent_class.Create;
 ps.init(incl);
 ps.parse;
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+var
+insst:insertstake_class;
+begin
+insst:=insertstake_class.Create;
+insst.init(incl);
+setlength(insst.stakes,1);
+insst.stakes[0].idevent:=1392;
+insst.stakes[0].idstaketype:=341;
+insst.stakes[0].stakevalue:=1.29;
+insst.stakes[0].margin:=0.5;
+insst.insert;
+
+
 end;
 
 procedure TForm1.initcl1;

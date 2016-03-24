@@ -22,6 +22,7 @@ interface
     sts:stakestemp;
     com1,com2:string;
     odate:string;
+    mcchecked:boolean;
     procedure parsemc(tr:ihtmlelement);
       procedure parsehi(tr:ihtmlelement);
      procedure parsetr (tr:ihtmlelement);
@@ -101,8 +102,9 @@ at:attrs;
  tr,td,inp:ihtmlelement;
  i,j,champind:integer;
  sqlstr:string;
-begin
 
+begin
+  mcchecked:=false;
 doc:=wb.Document as ihtmldocument2;
   setlength(at,1);
   at[0].name:='name';
@@ -121,6 +123,8 @@ if error>90 then exit;
 
         continue;
       end;
+      if not mcchecked then  continue;
+
        if tr.className='hi' then
       begin
         parsehi(tr);
@@ -216,6 +220,9 @@ br:string;
 i:integer;
 begin
  s:=tr.innerText;
+ mcchecked:=false;
+ if pos('Outrights',s)>0 then  exit;
+
   br:=char(10)+char(13);
   i:=pos(br,s);
   if i>0 then  s:=copy(s,1,i-1);
@@ -230,6 +237,7 @@ begin
   sqlstr:='findchamp N'''+sqlstr+''','+inttostr(id_sport)+';';
 
   id_champ:=wwdb.oneinteger(sqlstr);
+  if id_champ>0 then mcchecked:=true;
 
 end;
 
