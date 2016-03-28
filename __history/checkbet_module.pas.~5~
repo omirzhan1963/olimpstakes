@@ -1,0 +1,194 @@
+unit checkbet_module;
+
+interface
+  uses
+  classes,sysutils, globalfunc,mshtml, olimpbase_module, workwithdb_module;
+  type
+  betstake=record
+    id_event:integer;
+    id_staketype:integer;
+    stval:real;
+    settled:boolean;
+    won:boolean;
+
+  end;
+  betstakear=array of  betstake;
+  betrecord=record
+    betnum:integer;
+    betsum:integer;
+    betresult:integer;
+    bstakear:betstakear;
+  end;
+  checkbet_class=class(olimpbase_class)
+  betnumber:integer;
+  champari:ari;
+  comari:ari;
+     firstinpage:integer;
+  function getbetrec:betrecord;
+  function getfirst:betrecord;
+  function test1(tblindex:integer;tagname:string):string;
+
+
+  private
+  ftblindex:integer;
+  firsttbl:ihtmlelement;
+  maintbl:ihtmlelement;
+  maintblindex:integer;
+  maintrs: ihtmlelementcollection;
+  procedure navtopage(pagenumber:integer);
+  procedure parsepage;
+  procedure findfirstnumber;
+   procedure navigatefirst;
+   procedure navigatetopage(pagenum:integer);
+   procedure findmaintbl;
+   function ismaintr(tr:ihtmlelement):boolean;
+
+  end;
+
+
+
+
+
+  implementation
+
+{ checkbet_class }
+
+procedure checkbet_class.findfirstnumber;
+var
+i:integer;
+tables,btags: ihtmlelementcollection;
+tbl,btag:ihtmlelement;
+ s:string;
+begin
+  doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    tables:=elcol.tags('TABLE') as ihtmlelementcollection;
+    firsttbl:=tables.item(ftblindex,0) as ihtmlelement ;
+     btags:=firsttbl.all as ihtmlelementcollection;
+    btag:=btags.item(0,0) as ihtmlelement ;
+    s:=btag.innerText;
+    i:=pos('#',s);
+     if i<1 then  error:=3;
+     if error>0  then  exit;
+     delete(s,1,i);
+     s:=trim(s);
+     i:=pos('.',s);
+     if i<1  then  error:=3;
+        if error>0  then  exit;
+      s:=copy(s,1,i-1);
+      s:=trim(s);
+      if not strisint(s) then  error:=3;
+       if error>0  then  exit;
+      firstinpage:=strtoint(s);
+
+end;
+
+procedure checkbet_class.findmaintbl;
+  var
+i:integer;
+tables,trs: ihtmlelementcollection;
+tbl,btag:ihtmlelement;
+ s:string;
+begin
+   doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    tables:=elcol.tags('TABLE') as ihtmlelementcollection;
+    maintbl:=tables.item(ftblindex,0) as ihtmlelement ;
+    maintrs:=maintbl.all as ihtmlelementcollection;
+    maintrs:=maintrs.tags('TR') as ihtmlelement;
+    maintblindex:=maintbl.sourceIndex;
+end;
+
+function checkbet_class.getbetrec: betrecord;
+begin
+
+end;
+
+function checkbet_class.getfirst: betrecord;
+begin
+
+end;
+
+function checkbet_class.ismaintr(tr: ihtmlelement): boolean;
+var
+parentel:ihtmlelement;
+begin
+ parentel:=tr.parentElement;
+ result:=false;
+ while parentel.tagName<>'HTML' do
+ begin
+ if ((parentel.tagName='TABLE') and (parentel.sourceIndex<>maintblindex)) then
+   begin
+     exit;
+   end;
+   if parentel.sourceIndex=maintblindex then
+    begin
+      result:=true;
+      exit;
+    end;
+  parentel:=parentel.parentElement;
+ end;
+
+end;
+
+procedure checkbet_class.navigatefirst;
+var
+atags:ihtmlelementcollection;
+atag:ihtmlelement;
+i:integer;
+s:string;
+begin
+    doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    atags:=elcol.tags('A') as  ihtmlelementcollection;
+    for I := 2 to atags.length-1 do
+    begin
+      atag:=atags.item(i,0) as   ihtmlelement;
+      s:=atag.innerText;
+      s:=trim(s);
+      if s='My bets' then
+       begin
+         atag.click;
+         wait(3000);
+         exit;
+       end;
+
+
+    end;
+
+
+end;
+
+procedure checkbet_class.navigatetopage(pagenum: integer);
+begin
+
+end;
+
+procedure checkbet_class.navtopage(pagenumber: integer);
+begin
+
+end;
+
+procedure checkbet_class.parsepage;
+begin
+
+end;
+
+function checkbet_class.test1(tblindex: integer;tagname:string): string;
+var
+el:ihtmlelement;
+
+
+
+begin
+ navigatefirst;
+ doc:=wb.document as ihtmldocument2;
+ elcol:=doc.all;
+ elcol:=elcol.tags(tagname) as ihtmlelementcollection;
+ el:=elcol.item(tblindex,0)  as ihtmlelement ;
+
+
+ result:=el.outerHTML;
+end;
+
+end.

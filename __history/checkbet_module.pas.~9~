@@ -1,0 +1,450 @@
+unit checkbet_module;
+
+interface
+  uses
+  classes,sysutils, globalfunc,mshtml, olimpbase_module, workwithdb_module;
+  type
+  betstake=record
+    id_event:integer;
+    id_staketype:integer;
+    stval:real;
+    settled:boolean;
+    won:boolean;
+
+  end;
+  betstakear=array of  betstake;
+  betrecord=record
+  settledtimestr:string;
+    betnum:integer;
+    betsum:integer;
+    betresult:integer;
+    bstakear:betstakear;
+  end;
+  checkbet_class=class(olimpbase_class)
+  betnumber:integer;
+  champari:ari;
+  comari:ari;
+     firstinpage:integer;
+  function getbetrec:betrecord;
+  function getfirst:betrecord;
+  function test1(tblindex:integer;tagname:string):string;
+   procedure findfirstnumber;
+
+  private
+  ftblindex:integer;
+  firsttbl:ihtmlelement;
+  maintbl:ihtmlelement;
+  maintblindex:integer;
+  maintrs: ihtmlelementcollection;
+  fbr:betrecord;
+  tempdate:string;
+  tempsport:string;
+  tempchamp:string;
+  tempcom1,tempcom2:string;
+  tempid_sport,tempid_champ,tempid_com1,tempid_com2,tempid_event:integer;
+  tempstakegroup,tempstaketype:string;
+  tempid_stakegroup,tempid_staketype:integer;
+  procedure navtopage(pagenumber:integer);
+  procedure parsepage;
+   procedure parsemaintr(tr:ihtmlelement);
+   procedure navigatefirst;
+   procedure navigatetopage(pagenum:integer);
+   procedure findmaintbl;
+   function ismaintr(tr:ihtmlelement):boolean;
+   procedure parse1td(td:ihtmlelement);
+    procedure parse2td(td:ihtmlelement);
+      procedure parse3td(td:ihtmlelement);
+      procedure    parsesmalltbl(tbl:ihtmlelement);
+      procedure  parsestaketr(tr:ihtmlelement;ind:integer);
+       procedure parse1smalltd(td:ihtmlelement;ind:integer);
+    procedure parse2smalltd(td:ihtmlelement;ind:integer);
+      procedure parse3smalltd(td:ihtmlelement;ind:integer);
+            procedure parse4smalltd(td:ihtmlelement;ind:integer);
+  end;
+
+
+
+
+
+  implementation
+
+{ checkbet_class }
+
+procedure checkbet_class.findfirstnumber;
+var
+i:integer;
+tables,btags: ihtmlelementcollection;
+tbl,btag:ihtmlelement;
+ s:string;
+begin
+  doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    tables:=elcol.tags('TABLE') as ihtmlelementcollection;
+    firsttbl:=tables.item(ftblindex,0) as ihtmlelement ;
+     btags:=firsttbl.all as ihtmlelementcollection;
+    btag:=btags.item(0,0) as ihtmlelement ;
+    s:=btag.innerText;
+    i:=pos('#',s);
+     if i<1 then  error:=3;
+     if error>0  then  exit;
+     delete(s,1,i);
+     s:=trim(s);
+     i:=pos('.',s);
+     if i<1  then  error:=3;
+        if error>0  then  exit;
+      s:=copy(s,1,i-1);
+      s:=trim(s);
+      if not strisint(s) then  error:=3;
+       if error>0  then  exit;
+      firstinpage:=strtoint(s);
+
+end;
+
+procedure checkbet_class.findmaintbl;
+  var
+i:integer;
+tables,trs: ihtmlelementcollection;
+tbl,btag:ihtmlelement;
+ s:string;
+begin
+   doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    tables:=elcol.tags('TABLE') as ihtmlelementcollection;
+    maintbl:=tables.item(ftblindex,0) as ihtmlelement ;
+    maintrs:=maintbl.all as ihtmlelementcollection;
+    maintrs:=maintrs.tags('TR') as ihtmlelementcollection;
+    maintblindex:=maintbl.sourceIndex;
+end;
+
+function checkbet_class.getbetrec: betrecord;
+var
+i:integer;
+tr:ihtmlelement;
+begin
+  findmaintbl;
+  for I := 0 to maintrs.length-1 do
+   begin
+     tr:=maintrs.item(i,0) as ihtmlelement;
+     if ismaintr(tr) then
+       begin
+         parsemaintr(tr);
+         if fbr.betnum=betnumber then
+           begin
+             result:=fbr;
+             exit;
+           end;
+
+
+       end;
+   end;
+end;
+
+function checkbet_class.getfirst: betrecord;
+begin
+
+end;
+
+function checkbet_class.ismaintr(tr: ihtmlelement): boolean;
+var
+parentel:ihtmlelement;
+begin
+ parentel:=tr.parentElement;
+ result:=false;
+ while parentel.tagName<>'HTML' do
+ begin
+ if ((parentel.tagName='TABLE') and (parentel.sourceIndex<>maintblindex)) then
+   begin
+     exit;
+   end;
+   if parentel.sourceIndex=maintblindex then
+    begin
+      result:=true;
+      exit;
+    end;
+  parentel:=parentel.parentElement;
+ end;
+
+end;
+
+procedure checkbet_class.navigatefirst;
+var
+atags:ihtmlelementcollection;
+atag:ihtmlelement;
+i:integer;
+s:string;
+begin
+    doc:=wb.Document as ihtmldocument2;
+     elcol:=doc.all;
+    atags:=elcol.tags('A') as  ihtmlelementcollection;
+    for I := 2 to atags.length-1 do
+    begin
+      atag:=atags.item(i,0) as   ihtmlelement;
+      s:=atag.innerText;
+      s:=trim(s);
+      if s='My bets' then
+       begin
+         atag.click;
+         wait(3000);
+         exit;
+       end;
+
+
+    end;
+
+
+end;
+
+procedure checkbet_class.navigatetopage(pagenum: integer);
+begin
+
+end;
+
+procedure checkbet_class.navtopage(pagenumber: integer);
+begin
+
+end;
+
+procedure checkbet_class.parse1smalltd(td: ihtmlelement;ind:integer);
+var
+s:string;
+begin
+s:=td.innerText;
+s:=trim(s);
+ if s='Online' then s:='00:00:0000 00:00';
+ tempdate:=transformdate(s);
+
+end;
+
+procedure checkbet_class.parse1td(td: ihtmlelement);
+var
+s:string;
+begin
+ s:=td.innerText;
+ fbr.settledtimestr:='';
+ while length(s)>0 do
+   begin
+     if ((isdigit(s[1]))or (s[1]=':') or (s[1]='.') or (s[1]=' ')) then
+     fbr.settledtimestr:=fbr.settledtimestr+s[1];
+     delete(s,1,1);
+     fbr.settledtimestr:=trim(fbr.settledtimestr);
+     fbr.settledtimestr:=transformdate(fbr.settledtimestr);
+   end;
+end;
+
+procedure checkbet_class.parse2smalltd(td: ihtmlelement;ind:integer);
+var
+s,s1,sqlstr:string;
+i:integer;
+br:string;
+atags:ihtmlelementcollection;
+atag:ihtmlelement;
+begin
+  atags:=td.all as ihtmlelementcollection;
+  atags:=atags.tags('A')as ihtmlelementcollection;
+  atag:=atags.item(0,0) as ihtmlelement;
+ s:=td.innerText;
+   s1:=atag.innerText;
+   i:=length(s1);
+   delete(s,1,i);
+   s:=trim(s);
+       s:=stringreplace(s,'''','$$$',[rfreplaceall]);
+        s1:=stringreplace(s1,'''','$$$',[rfreplaceall]);
+
+   i:=pos('.',s1);
+   tempsport:=copy(s1,1,i-1);
+   delete(s1,1,i);
+   s1:=trim(s1);
+   i:=length(s1);
+   delete(s1,i,1);
+   s1:=trim(s1);
+    i:=length(s1);
+    if s1[i]='.'  then  delete(s,i,1);
+    i:=pos(' - ',s1 );
+    tempcom2:=copy(s1,i+3,1000);
+    delete(s1,i,1000);
+       i:=length(s1);
+    if s1[i]='.'  then  delete(s,i,1);
+     tempcom1:='';
+     i:=length(s1);
+     while s1[i]<>'.' do
+     begin
+     tempcom1:=s1[i]+tempcom1;
+     delete(s1,i,1);
+     i:=i-1;
+     end;
+     if length(tempcom1)<3 then
+      begin
+        if s1[i]='.' then
+        begin
+          tempcom1:='.'+tempcom1;
+          delete(s1,i,1);
+          i:=i-1;
+              while s1[i]<>'.' do
+     begin
+     tempcom1:=s1[i]+tempcom1;
+     delete(s1,i,1);
+     i:=i-1;
+     end;
+        end;
+      end;
+   tempchamp:=s1;
+   sqlstr:='findsport N'''+tempsport+''';';
+   tempid_sport:=wwdb.oneinteger(sqlstr) ;
+   sqlstr:='findchamp N'''+tempchamp+''','+inttostr(tempid_sport)+';';
+   tempid_champ:=wwdb.oneinteger(sqlstr);
+
+   sqlstr:='findcom N'''+tempcom1+''','+inttostr(tempid_sport)+','+inttostr(tempid_champ)+';';
+
+   tempid_com1:=wwdb.oneinteger(sqlstr);
+   sqlstr:='findcom N'''+tempcom2+''','+inttostr(tempid_sport)+','+inttostr(tempid_champ)+';';
+
+   tempid_com2:=wwdb.oneinteger(sqlstr);
+      sqlstr:='findevent N'''+tempdate+''','+inttostr(tempid_com1)+','+inttostr(tempid_com2)+','+inttostr(tempid_champ)+';';
+
+   tempid_event:=wwdb.oneinteger(sqlstr) ;
+   i:=pos('.',s);
+   tempstakegroup:=copy(s,1,i-1);
+   delete(s,1,i);
+   tempstaketype:=trim(s);
+   tempstakegroup:=trim(tempstakegroup);
+ sqlstr:='findstakegroup N'''+tempstakegroup+''','+inttostr(tempid_sport)+';';
+ tempid_stakegroup:=wwdb.oneinteger(sqlstr);
+    tempstaketype:=stringreplace(  tempstaketype,tempcom1,'com1',[rfreplaceall]);
+       tempstaketype:=stringreplace(  tempstaketype,tempcom2,'com2',[rfreplaceall]);
+
+    sqlstr:='findstaketype N'''+tempstaketype+''','+inttostr(tempid_sport)+','+inttostr(tempid_stakegroup)+';';
+  tempid_staketype:=wwdb.oneinteger(sqlstr);
+
+end;
+
+procedure checkbet_class.parse2td(td: ihtmlelement);
+var
+s,s1:string;
+btags,tdels,itags,tables:ihtmlelementcollection;
+btag,itag,tbl:ihtmlelement;
+i:integer;
+begin
+tdels:=td.all as ihtmlelementcollection;
+ btags:=tdels.tags('B') as   ihtmlelementcollection;
+ btag:=btags.item(0,0) as  ihtmlelement  ;
+   itags:=btag.all as ihtmlelementcollection;
+ itags:=itags.tags('I') as   ihtmlelementcollection;
+   itag:=itags.item(0,0) as  ihtmlelement  ;
+   s:=btag.innerText;
+   s1:=itag.innerText;
+   i:=pos(s1,s);
+   delete(s,i,1000);
+   s:=trim(s);
+   delete(s1,1,1);
+   i:=pos('.',s);
+   s:=copy(s,1,i-1);
+   fbr.betnum:=strtoint(s);
+  tables:=tdels.tags('TABLE') as ihtmlelementcollection;
+    tbl:=tables.item(0,0) as  ihtmlelement  ;
+    parsesmalltbl(tbl);
+end;
+
+procedure checkbet_class.parse3smalltd(td: ihtmlelement;ind:integer);
+begin
+
+end;
+
+procedure checkbet_class.parse3td(td: ihtmlelement);
+var
+s:string;
+begin
+ s:=td.innerText;
+ s:=trim(s);
+ delete(s,1,1);
+ fbr.betsum:=strtoint(s);
+end;
+
+procedure checkbet_class.parse4smalltd(td: ihtmlelement; ind: integer);
+begin
+
+end;
+
+procedure checkbet_class.parsemaintr(tr: ihtmlelement);
+var
+tds:ihtmlelementcollection;
+td:ihtmlelement;
+i,j:integer;
+begin
+setlength(fbr.bstakear,0);
+ tds:=tr.all as ihtmlelementcollection;
+ tds:=tds.tags('TD') as ihtmlelementcollection;
+  j:=0;
+  for I := 0 to tds.length-1 do
+    begin
+    td:=tds.item(i,0) as ihtmlelement;
+      if not ismainchild(tr,td) then  continue;
+      j:=j+1;
+      case j of
+       1:parse1td(td);
+       2:parse2td(td);
+       3:parse3td(td);
+
+      end;
+    end;
+end;
+
+procedure checkbet_class.parsepage;
+begin
+
+end;
+
+procedure checkbet_class.parsesmalltbl(tbl: ihtmlelement);
+var
+trs:ihtmlelementcollection;
+tr:ihtmlelement;
+  I,k: Integer;
+begin
+  trs:=tbl.all as ihtmlelementcollection;
+  trs:=trs.tags('TR')  as ihtmlelementcollection;
+  k:=trs.length;
+  setlength(fbr.bstakear,k);
+  for I := 1 to trs.length-1 do
+   parsestaketr(tr,i-1);
+end;
+
+procedure checkbet_class.parsestaketr(tr: ihtmlelement;ind:integer);
+var
+tds:ihtmlelementcollection;
+td:ihtmlelement;
+i,j:integer;
+begin
+ tds:=tr.all as ihtmlelementcollection;
+ tds:=tds.tags('TD') as ihtmlelementcollection;
+  j:=0;
+  for I := 0 to tds.length-1 do
+    begin
+    td:=tds.item(i,0) as ihtmlelement;
+
+      j:=j+1;
+      case j of
+       1:parse1smalltd(td,ind);
+       2:parse2smalltd(td,ind);
+       3:parse3smalltd(td,ind);
+       4:parse4smalltd(td,ind);
+      end;
+    end;
+end;
+
+function checkbet_class.test1(tblindex: integer;tagname:string): string;
+var
+el:ihtmlelement;
+
+
+
+begin
+ navigatefirst;
+ doc:=wb.document as ihtmldocument2;
+ elcol:=doc.all;
+ elcol:=elcol.tags(tagname) as ihtmlelementcollection;
+ el:=elcol.item(tblindex,0)  as ihtmlelement ;
+
+
+ result:=el.outerHTML;
+end;
+
+end.

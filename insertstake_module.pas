@@ -67,12 +67,7 @@ implementation
              if not isdigit(s[16]) then  exit;
              result:=true;
   end;
-  function transformdate(s:string):string;
-  begin
 
-    result:=copy(s,7,4)+'-'+copy(s,4,2)+'-'+copy(s,1,2)+' '+copy(s,12,5)+':00.000';
-
-  end;
 
 { insertstake_class }
 

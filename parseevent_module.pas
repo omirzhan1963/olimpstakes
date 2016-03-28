@@ -23,6 +23,7 @@ interface
     com1,com2:string;
     odate:string;
     mcchecked:boolean;
+    checkedchamp:ari;
     procedure parsemc(tr:ihtmlelement);
       procedure parsehi(tr:ihtmlelement);
      procedure parsetr (tr:ihtmlelement);
@@ -56,12 +57,7 @@ implementation
              if not isdigit(s[16]) then  exit;
              result:=true;
   end;
-  function transformdate(s:string):string;
-  begin
-
-    result:=copy(s,7,4)+'-'+copy(s,4,2)+'-'+copy(s,1,2)+' '+copy(s,12,5)+':00.000';
-
-  end;
+ 
 
 { parseevent_class }
 
@@ -105,6 +101,7 @@ at:attrs;
 
 begin
   mcchecked:=false;
+     setlength(checkedchamp,0);
 doc:=wb.Document as ihtmldocument2;
   setlength(at,1);
   at[0].name:='name';
@@ -217,7 +214,7 @@ procedure parseevent_class.parsemc(tr: ihtmlelement);
 var
 s,sqlstr:string;
 br:string;
-i:integer;
+i,k:integer;
 begin
  s:=tr.innerText;
  mcchecked:=false;
@@ -238,7 +235,9 @@ begin
 
   id_champ:=wwdb.oneinteger(sqlstr);
   if id_champ>0 then mcchecked:=true;
-
+    k:=length(checkedchamp);
+        setlength(checkedchamp,k+1);
+        checkedchamp[k]:=id_champ;
 end;
 
 procedure parseevent_class.parsenobr(nbr: ihtmlelement);

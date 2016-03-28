@@ -1,0 +1,74 @@
+unit checkbet_module;
+
+interface
+  uses
+  classes,sysutils, globalfunc, olimpbase_module, workwithdb_module;
+  type
+  betstake=record
+    id_event:integer;
+    id_staketype:integer;
+    stval:real;
+    settled:boolean;
+    won:boolean;
+
+  end;
+  betstakear=array of  betstake;
+  betrecord=record
+    betnum:integer;
+    betsum:integer;
+    betresult:integer;
+    bstakear:betstakear;
+  end;
+  checkbet_class=class(olimpbase_class)
+  betnumber:integer;
+  champari:ari;
+  comari:ari;
+
+  function getbetrec:betrecord;
+  function getfirst:betrecord;
+
+
+
+  private
+  firstinpage:integer;
+  procedure navtopage(pagenumber:integer);
+  procedure parsepage;
+  procedure findfirstnumber;
+
+
+  end;
+
+
+
+
+
+  implementation
+
+{ checkbet_class }
+
+procedure checkbet_class.findfirstnumber;
+begin
+
+end;
+
+function checkbet_class.getbetrec: betrecord;
+begin
+
+end;
+
+function checkbet_class.getfirst: betrecord;
+begin
+
+end;
+
+procedure checkbet_class.navtopage(pagenumber: integer);
+begin
+
+end;
+
+procedure checkbet_class.parsepage;
+begin
+
+end;
+
+end.

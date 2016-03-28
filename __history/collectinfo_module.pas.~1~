@@ -1,0 +1,42 @@
+unit collectinfo_module;
+
+interface
+uses
+classes,sysutils, globalfunc, login_module, navchamp_module,
+  navsport_module, parseevent_module, workwithdb_module;
+implementation
+   type
+   collectinfo=class
+     l:login_class;
+     ns:navsport_class;
+     nc:navchamp_class;
+     p:parseevent_class;
+     logstr,passstr:string;
+     incl:init_class;
+     currusum:integer;
+     procedure ci;
+     constructor create;
+   end;
+{ collectinfo }
+
+procedure collectinfo.ci;
+begin
+  l:=login_class.create;
+  l.init(incl);
+  l.logstr:=logstr;
+  l.passstr:=passstr;
+  l.login;
+  l.check;
+  if not l.checked then  exit;
+  currusum:=l.currusum;
+
+end;
+
+constructor collectinfo.create;
+begin
+logstr:='222800';
+passstr:='noik52ABDR';
+
+end;
+
+end.

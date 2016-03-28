@@ -32,6 +32,7 @@ tform:ihtmlelement;
 i:integer;
 begin
 if not assigned(doc) then  exit;
+form:=nil;
 elcol:=doc.all;
  forms:=elcol.tags('FORM') as ihtmlelementcollection;
  for I := 0 to forms.length-1 do

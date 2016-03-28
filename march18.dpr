@@ -15,7 +15,8 @@ uses
   confirmstake_module in 'confirmstake_module.pas',
   checkbet_module in 'checkbet_module.pas',
   strategybase_module in 'strategybase_module.pas',
-  strategy1_module in 'strategy1_module.pas';
+  strategy1_module in 'strategy1_module.pas',
+  collectinfo_module in 'collectinfo_module.pas';
 
 {$R *.res}
 

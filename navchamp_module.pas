@@ -7,14 +7,18 @@ interface
    type
    navchamp_class=class(olimpbase_class)
    champari:ari;
-
+   checkedchamp:ari;
+   checkedsport:ari;
+   tn:timeofnav;
    procedure nav;
+   constructor create;
    private
    id_sport:integer;
    procedure submit;
    procedure checkmc(tr:ihtmlelement);
    procedure checktr(tr:ihtmlelement);
-
+   procedure settimeofnav;
+   procedure deletelinenumber;
 
 
 
@@ -29,7 +33,7 @@ implementation
 procedure navchamp_class.checkmc(tr: ihtmlelement);
 var
 sqlstr:string;
-i:integer;
+i,k:integer;
 begin
  sqlstr:=tr.innerText;
  i:=pos('.',sqlstr);
@@ -39,7 +43,9 @@ begin
  sqlstr:=trim(sqlstr);
  sqlstr:='findsport N'''+sqlstr+''';';
  id_sport:=wwdb.oneinteger(sqlstr);
-
+    k:=length(checkedsport);
+        setlength(checkedsport,k+1);
+        checkedsport[k]:=id_sport;
 end;
 
 procedure navchamp_class.checktr(tr: ihtmlelement);
@@ -47,9 +53,11 @@ var
 
  tds,inputs:ihtmlelementcollection;
  td,inp:ihtmlelement;
- i,j,champind:integer;
+ i,j,champind,k:integer;
  sqlstr:string;
 begin
+if id_sport=25 then exit;
+
 tds:=tr.all as ihtmlelementcollection;
 tds:=tds.tags('TD')  as ihtmlelementcollection;
 if tds.length=2 then
@@ -65,10 +73,39 @@ if tds.length=2 then
    inputs:=inputs.tags('INPUT')     as ihtmlelementcollection;
        inp:=inputs.item(0,0) as ihtmlelement  ;
        inp.setAttribute('checked',true,0);
-
+        k:=length(checkedchamp);
+        setlength(checkedchamp,k+1);
+        checkedchamp[k]:=champind;
 
         end;
       end;
+end;
+
+constructor navchamp_class.create;
+begin
+inherited;
+tn:=anytime;
+end;
+
+procedure navchamp_class.deletelinenumber;
+var
+inputs:ihtmlelementcollection;
+inp:ihtmlelement;
+i:integer;
+begin
+ inputs:=form.all as ihtmlelementcollection;
+ inputs:=inputs.tags('INPUT')   as ihtmlelementcollection;
+ for I := inputs.length-1 downto inputs.length-16 do
+  begin
+  inp:=inputs.item(i,0) as ihtmlelement;
+    if ((inp.getAttribute('type',0)='checkbox') and (inp.getAttribute('name',0)='line_nums')) then
+    begin
+      inp.setAttribute('checked',false,0);
+      exit;
+    end;
+  end;
+
+
 end;
 
 procedure navchamp_class.nav;
@@ -79,7 +116,8 @@ at:attrs;
  i,j,champind:integer;
  sqlstr:string;
 begin
-
+ setlength(checkedchamp,0);
+    setlength(checkedsport,0);
 doc:=wb.Document as ihtmldocument2;
   setlength(at,1);
   at[0].name:='name';
@@ -96,12 +134,59 @@ doc:=wb.Document as ihtmldocument2;
       checkmc(tr);
       continue;
     end;
+
+
    checktr(tr);
 
 
     end;
-
+  deletelinenumber;
+  settimeofnav;
  submit;
+end;
+
+procedure navchamp_class.settimeofnav;
+ var
+ options:ihtmlelementcollection;
+opt:ihtmlelement;
+i:integer;
+begin
+ if tn<>anytime then
+  begin
+    options:=form.all as ihtmlelementcollection;
+  options:= options.tags('OPTION')    as ihtmlelementcollection;
+
+
+   case tn of
+    nexttwohour:
+    begin
+       opt:= options.item(1,0)  as ihtmlelement ;
+   opt.setAttribute('selected',true,0);
+     exit;
+   end;
+   nextsixhour:
+       begin
+       opt:= options.item(2,0)  as ihtmlelement ;
+   opt.setAttribute('selected',true,0);
+     exit;
+   end;
+      nexttvelwehour:
+       begin
+       opt:= options.item(3,0)  as ihtmlelement ;
+   opt.setAttribute('selected',true,0);
+     exit;
+   end;
+    nextday:
+       begin
+       opt:= options.item(4,0)  as ihtmlelement ;
+   opt.setAttribute('selected',true,0);
+     exit;
+   end;
+
+
+
+ end;
+  end;
 end;
 
 procedure navchamp_class.submit;

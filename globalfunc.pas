@@ -32,7 +32,9 @@ wait:tprocedure;
   function isdigit(c:char):boolean;
    function getattr(elem:ihtmlelement):attrs;
    function hasattrs(el:ihtmlelement;at:attrs):boolean;
-
+    function strisint(s:string):boolean;
+    function ismainchild(parentel,childel:ihtmlelement):boolean;
+       function transformdate(s:string):string;
 implementation
   function getattr(elem:ihtmlelement):attrs;
 var nn:OleVariant;
@@ -131,5 +133,53 @@ j,i,cnt,cntattr:integer;
 
 
     end;
+       function strisint(s:string):boolean;
+         var
+         i:integer;
+       begin
+         result:=false;
+         if length(s)=0 then  exit;
 
+         while length(s)>0 do
+           begin
+             if not isdigit(s[1]) then
+
+                exit;
+
+               delete(s,1,1);
+           end;
+           result:=true;
+       end;
+            function ismainchild(parentel,childel:ihtmlelement):boolean;
+            var
+            tagname:string;
+            tempparent:ihtmlelement;
+            mainindex:integer;
+            begin
+              tagname:=parentel.tagname;
+              mainindex:=parentel.sourceIndex;
+
+                 tempparent:=childel.parentElement;
+ result:=false;
+ while  tempparent.tagName<>'HTML' do
+ begin
+ if (( tempparent.tagName=tagname) and ( tempparent.sourceIndex<>mainindex)) then
+   begin
+     exit;
+   end;
+   if  tempparent.sourceIndex=mainindex then
+    begin
+      result:=true;
+      exit;
+    end;
+  tempparent:= tempparent.parentElement;
+ end;
+
+            end;
+   function transformdate(s:string):string;
+  begin
+
+    result:=copy(s,7,4)+'-'+copy(s,4,2)+'-'+copy(s,1,2)+' '+copy(s,12,5)+':00.000';
+
+  end;
 end.

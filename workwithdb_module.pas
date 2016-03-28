@@ -2,13 +2,14 @@ unit workwithdb_module;
 
 interface
   uses
-SysUtils, Classes, adodb, dm_module;
+SysUtils, Classes, adodb, dm_module, globalfunc;
   type
   workwithdb_class=class
    query:tadoquery;
    procedure setval(qrstr:string);
    function onestring(qstr:string):string;
     function oneinteger(qstr:string):integer;
+    function getari(sqlstr:string):ari;
      constructor create;
   destructor destroy;override;
   class var    refcount:integer;
@@ -45,6 +46,28 @@ begin
   inherited;
     end;
   end;
+end;
+
+function workwithdb_class.getari(sqlstr: string): ari;
+var
+k:integer;
+begin
+setlength(result,0);
+ query.Close;
+query.SQL.Clear;
+query.SQL.Add(sqlstr);
+
+query.Active:=true;
+while (not query.Eof) do
+  begin
+  k:=length(result);
+  setlength(result,k+1);
+
+
+  result[k]:=query.Fields.Fields[0].AsInteger;
+  query.Next;
+  end;
+query.Close;
 end;
 
 function workwithdb_class.oneinteger(qstr: string): integer;
