@@ -4,34 +4,17 @@ interface
   uses
   classes,sysutils,math, globalfunc,mshtml, olimpbase_module, workwithdb_module;
   type
-  betstake=record
-    id_event:integer;
-    id_staketype:integer;
-    stval:real;
-    settled:boolean;
-    won:boolean;
-
-  end;
-  betstakear=array of  betstake;
-  betrecord=record
-  settledtimestr:string;
-    betnum:integer;
-    betsum:integer;
-    betresult:integer;
-    bstakear:betstakear;
-  end;
+ 
   checkbet_class=class(olimpbase_class)
   betnumber:integer;
-  champari:ari;
-  comari:ari;
-     firstinpage:integer;
+
+
   function getbetrec:betrecord;
   function getfirst:betrecord;
-  function test1(tblindex:integer;tagname:string):string;
-   procedure findfirstnumber;
-       procedure navigatefirst;
-      procedure navtopage(pagenumber:integer);
+
+
   private
+          firstinpage:integer;
   ftblindex:integer;
   firsttbl:ihtmlelement;
   maintbl:ihtmlelement;
@@ -49,7 +32,9 @@ interface
    tempstatus:string;
   procedure parsepage;
    procedure parsemaintr(tr:ihtmlelement);
-
+       procedure findfirstnumber;
+       procedure navigatefirst;
+      procedure navtopage(pagenumber:integer);
 
    procedure findmaintbl;
    function ismaintr(tr:ihtmlelement):boolean;
@@ -523,21 +508,6 @@ begin
 
 end;
 
-function checkbet_class.test1(tblindex: integer;tagname:string): string;
-var
-el:ihtmlelement;
 
-
-
-begin
- navigatefirst;
- doc:=wb.document as ihtmldocument2;
- elcol:=doc.all;
- elcol:=elcol.tags(tagname) as ihtmlelementcollection;
- el:=elcol.item(tblindex,0)  as ihtmlelement ;
-
-
- result:=el.outerHTML;
-end;
 
 end.

@@ -73,6 +73,7 @@
 			<DCCReference Include="strategybase_module.pas"/>
 			<DCCReference Include="strategy1_module.pas"/>
 			<DCCReference Include="collectinfo_module.pas"/>
+			<DCCReference Include="setonestake_module.pas"/>
 			<None Include="Profiling\AQtimeModule1.aqt"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>

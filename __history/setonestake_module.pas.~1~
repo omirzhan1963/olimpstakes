@@ -1,0 +1,22 @@
+unit setonestake_module;
+
+interface
+ uses
+ classes,sysutils,mshtml, workwithdb_module, confirmstake_module, globalfunc,
+  insertstake_module, navchamp_module, navsport_module, login_module,
+  olimpbase_module, checkbet_module;
+ type
+ setonestake=class(olimpbase_class)
+ esa:evstar ;
+
+  l:login_class;
+  nc:navchamp_class;
+  ns:navsport_class;
+  insst:insertstake_class;
+  cs:confirmstake_class;
+  cb:checkbet_class;
+  procedure insertstake;
+ end;
+implementation
+
+end.

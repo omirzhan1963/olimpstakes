@@ -17,6 +17,22 @@ uses
        margin:real;
      end;
      evstar=array of evst;
+      betstake=record
+    id_event:integer;
+    id_staketype:integer;
+    stval:real;
+    settled:boolean;
+    won:boolean;
+
+  end;
+  betstakear=array of  betstake;
+  betrecord=record
+  settledtimestr:string;
+    betnum:integer;
+    betsum:integer;
+    betresult:integer;
+    bstakear:betstakear;
+  end;
   timeofnav=(anytime,nexttwohour,nextsixhour,nexttvelwehour,nextday);
   tprocedure=procedure(millisec:integer);
   ari=array of integer;

@@ -9,6 +9,7 @@ SysUtils, Classes, adodb, dm_module, globalfunc;
    procedure setval(qrstr:string);
    function onestring(qstr:string):string;
     function oneinteger(qstr:string):integer;
+    function onereal(qstr:string):real;
     function getari(sqlstr:string):ari;
      constructor create;
   destructor destroy;override;
@@ -83,6 +84,22 @@ query.Active:=true;
 if query.RecordCount>0 then
 
   result:=query.Fields.Fields[0].AsInteger;
+query.Close;
+end;
+
+function workwithdb_class.onereal(qstr: string): real;
+begin
+  result:=-1;
+
+
+ query.Close;
+query.SQL.Clear;
+query.SQL.Add(qstr);
+
+query.Active:=true;
+if query.RecordCount>0 then
+
+  result:=query.Fields.Fields[0].AsSingle;
 query.Close;
 end;
 

@@ -15,7 +15,7 @@ interface
   procedure findform(at:attrs);
   public
   error:integer;
-  procedure init(initcl:init_class);
+  procedure init(initcl:init_class);virtual;
   end;
 
 

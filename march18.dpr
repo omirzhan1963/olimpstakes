@@ -16,7 +16,8 @@ uses
   checkbet_module in 'checkbet_module.pas',
   strategybase_module in 'strategybase_module.pas',
   strategy1_module in 'strategy1_module.pas',
-  collectinfo_module in 'collectinfo_module.pas';
+  collectinfo_module in 'collectinfo_module.pas',
+  setonestake_module in 'setonestake_module.pas';
 
 {$R *.res}
 
