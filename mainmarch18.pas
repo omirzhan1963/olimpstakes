@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, OleCtrls, SHDocVw, StdCtrls, ExtCtrls, login_module, globalfunc,
   navsport_module, navchamp_module, parseevent_module, insertstake_module,
-  confirmstake_module, collectinfo_module, checkbet_module;
+  confirmstake_module, collectinfo_module, checkbet_module, strategy1_module;
 
 type
   TForm1 = class(TForm)
@@ -25,6 +25,8 @@ type
     Button8: TButton;
     Edit1: TEdit;
     Edit2: TEdit;
+    Button9: TButton;
+    Button10: TButton;
     procedure WebBrowser1NewWindow2(ASender: TObject; var ppDisp: IDispatch;
       var Cancel: WordBool);
     procedure Button1Click(Sender: TObject);
@@ -36,9 +38,12 @@ type
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
 
   private
    incl:init_class;
+   incl2:init_class;
    procedure initcl1;
        procedure initcl2;
 
@@ -76,6 +81,11 @@ implementation
  while form1.Timer1.Enabled do  application.ProcessMessages;
    end;
  end;
+procedure TForm1.Button10Click(Sender: TObject);
+begin
+webbrowser1.Navigate('olimp.kz');
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 var
 l:login_class;
@@ -224,6 +234,20 @@ memo1.Lines.Add(fbr.settledtimestr);
    end;
 end;
 
+procedure TForm1.Button9Click(Sender: TObject);
+var
+strat1:strategy1;
+
+begin
+initcl1;
+initcl2;
+strat1:=strategy1.Create;
+ strat1.incl:=incl;
+ strat1.incl2:=incl2;
+ strat1.strategystakesnumber:=5;
+ strat1.dostrategy1;
+end;
+
 procedure TForm1.initcl1;
 begin
     if not assigned(incl) then
@@ -234,9 +258,9 @@ end;
 
 procedure TForm1.initcl2;
 begin
-    if not assigned(incl) then  incl:=init_class.Create;
- incl.wb:=webbrowser2;
- incl.wait:=wait2;
+    if not assigned(incl2) then  incl2:=init_class.Create;
+ incl2.wb:=webbrowser2;
+ incl2.wait:=wait2;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);

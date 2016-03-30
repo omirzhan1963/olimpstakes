@@ -193,11 +193,13 @@ s:string;
 begin
     if not assigned(incl2) then  error:=5;
     if not assigned(esa) then  error:=4;
-
+    cs.init(incl2);
  if error>0 then  exit;
   s:=wb.LocationURL;
   if pos('olimp',s)<1 then
   begin
+  wb.Navigate('olimp.kz');
+  wait(2000);
   l.logstr:=logstr;
   l.passstr:=passstr;
    l.login;
@@ -216,9 +218,10 @@ begin
  wait(3000);
  insst.stakes:=esa;
  insst.insert;
- wait(5000);
+ wait(50000);
  cs.sum:=sum;
  cs.acceptchange:=true;
+ cs.stakes:=esa;
  cs.confirm;
  wait(2000);
  cs.check;

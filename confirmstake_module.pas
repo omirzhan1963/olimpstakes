@@ -43,7 +43,7 @@ confirmed:=false;
   doc:=wb.Document as ihtmldocument2;
   b:=doc.body;
    str:=b.innerText;
-   if pos('Bet successfully settled',str)>0 then
+   if pos('Your bet is successfully accepted!',str)>0 then
     confirmed:=true;
 end;
 

@@ -15,7 +15,11 @@ interface
   procedure findform(at:attrs);
   public
   error:integer;
+  ermessages:tstringlist;
   procedure init(initcl:init_class);virtual;
+  procedure writeer;
+  procedure writeersl(sl:tstringlist);
+  constructor create;
   end;
 
 
@@ -24,6 +28,14 @@ interface
 implementation
 
 { olimpbase_class }
+
+constructor olimpbase_class.create;
+begin
+inherited;
+ermessages:=tstringlist.Create;
+ermessages.Add('no errors');
+wwdb:=workwithdb_class.Create;
+end;
 
 procedure olimpbase_class.findform(at: attrs);
 var
@@ -50,7 +62,68 @@ procedure olimpbase_class.init(initcl: init_class);
 begin
 wb:=initcl.wb;
 wait:=initcl.wait;
-wwdb:=workwithdb_class.Create;
+
+
+end;
+
+procedure olimpbase_class.writeer;
+var
+tempsl:tstringlist;
+dt:tdatetime;
+dtstr:string;
+errorstr:string;
+begin
+tempsl:=tstringlist.Create;
+ tempsl.LoadFromFile('march18errors.txt');
+ dt:=now();
+ dtstr:=datetostr(dt);
+  if (error>ermessages.Count-1) then
+  begin
+   tempsl.Add('not specified error occured in time  '+dtstr);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+  exit;
+
+  end;
+  errorstr:=ermessages[error-1];
+   tempsl.Add(errorstr+' in time '+dtstr);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+end;
+
+procedure olimpbase_class.writeersl(sl: tstringlist);
+var
+tempsl:tstringlist;
+dt:tdatetime;
+dtstr:string;
+errorstr:string;
+i:integer;
+begin
+if sl.Count=0 then
+    begin
+      writeer;
+      exit;
+    end;
+tempsl:=tstringlist.Create;
+ tempsl.LoadFromFile('march18errors.txt');
+ dt:=now();
+ dtstr:=datetostr(dt);
+  if (error>ermessages.Count-1) then
+  begin
+   tempsl.Add('not specified error occured in time  '+dtstr);
+    for I := 0 to sl.Count-1 do
+    tempsl.Add(sl[i]);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+  exit;
+
+  end;
+  errorstr:=ermessages[error-1];
+   tempsl.Add(errorstr+' in time '+dtstr);
+    for I := 0 to sl.Count-1 do
+    tempsl.Add(sl[i]);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
 
 end;
 

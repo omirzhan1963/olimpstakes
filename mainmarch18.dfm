@@ -148,6 +148,24 @@ object Form1: TForm1
     TabOrder = 13
     Text = 'Edit2'
   end
+  object Button9: TButton
+    Left = 23
+    Top = 235
+    Width = 19
+    Height = 85
+    Caption = 'Button9'
+    TabOrder = 14
+    OnClick = Button9Click
+  end
+  object Button10: TButton
+    Left = 32
+    Top = 368
+    Width = 75
+    Height = 25
+    Caption = 'Button10'
+    TabOrder = 15
+    OnClick = Button10Click
+  end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer

@@ -36,6 +36,7 @@ id_sport,id_champ:integer;
 begin
 setlength(restrictedsport,1);
 restrictedsport[0]:=25;
+
   wwdb:=workwithdb_class.create;
   l:=login_class.create;
   l.init(incl);

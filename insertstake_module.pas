@@ -14,6 +14,7 @@ interface
    stakestemp=array of staketemp;
     insertstake_class=class(olimpbase_class)
     stakes:evstar;
+
     procedure insert;
     private
      id_sport,id_champ,id_event:integer;
@@ -80,6 +81,8 @@ at:attrs;
  sqlstr:string;
 
 begin
+
+
  mcchecked:=false;
  submitbtnsettled:=false;
  stakechecked:=false;
@@ -100,23 +103,26 @@ doc:=wb.Document as ihtmldocument2;
       if tr.className='m_c' then
       begin
         parsemc(tr);
-if error>90 then exit;
+if error>90 then
+exit;
 
         continue;
       end;
-      if not mcchecked then  exit;
+
 
        if tr.className='hi' then
       begin
         parsehi(tr);
-if error>90 then exit;
+if error>90 then
+ exit;
 
         continue;
       end;
       parsetr(tr);
     end;
     wait(200);
- if stakechecked then  submitbtn.click;
+ if stakechecked then
+ submitbtn.click;
 
 end;
 
@@ -215,6 +221,8 @@ td,a:ihtmlelement;
  s,sqlstr:string;
 
 begin
+      if not mcchecked then
+      exit;
 tds:=tr.all as ihtmlelementcollection;
 tds:=tds.tags('TD')   as  ihtmlelementcollection;
 td:=tds.item(0,0) as ihtmlelement;
@@ -254,6 +262,7 @@ inputs:ihtmlelementcollection;
 inp:ihtmlelement ;
 br:string;
 i:integer;
+test:string;
 begin
  s:=tr.innerText;
  mcchecked:=false;
@@ -263,6 +272,7 @@ begin
       inputs:=tr.all as ihtmlelementcollection;
       inputs:=inputs.tags('INPUT')  as ihtmlelementcollection;
       submitbtn:=inputs.item(0,0)as ihtmlelement;
+       test:=submitbtn.getAttribute('value',0);
       submitbtnsettled:=true;
     end;
   br:=char(10)+char(13);
@@ -346,6 +356,8 @@ el:ihtmlelement;
 i:integer;
 s:string;
 begin
+       if not mcchecked then
+      exit;
    els:=tr.all as ihtmlelementcollection;
    tbls:=els.tags('TABLE')    as ihtmlelementcollection;
    if tbls.length>0 then  exit;

@@ -185,7 +185,7 @@ tds:=tds.tags('TD')   as  ihtmlelementcollection;
 td:=tds.item(0,0) as ihtmlelement;
 atags:=td.all as ihtmlelementcollection;
 atags:=atags.tags('A')  as ihtmlelementcollection;
-if atags.length=1 then
+if atags.length>0 then
   begin
     a:=atags.item(0,0) as ihtmlelement;
     a.click;
@@ -206,6 +206,7 @@ procedure parseevent_class.parseinnerb(s: string);
 var
 sqlstr:string;
 begin
+    s:=stringreplace(s,'''','$$$',[rfreplaceall]);
  sqlstr:='findstakegroup N'''+s+''','+inttostr(id_sport)+';';
  id_stakegroup:=wwdb.oneinteger(sqlstr);
 end;

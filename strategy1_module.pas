@@ -6,10 +6,10 @@ interface
   type
   strategy1=class
   incl,incl2:init_class;
-
+     strategystakesnumber:integer;
     procedure dostrategy1;
     private
-    strategystakesnumber:integer;
+
     wwdb:workwithdb_class;
     stakesari:ari;
     esa:evstar;
@@ -26,9 +26,11 @@ sqlstr:string;
 i,j,k:integer;
 tempid:integer;
 begin
-if not assigned(wwdb) then  wwdb:=workwithdb_class.create;
+if not assigned(wwdb) then
+ wwdb:=workwithdb_class.create;
 
-if not assigned(insst) then insst:=setonestake.create;
+if not assigned(insst) then
+insst:=setonestake.create;
 insst.incl2:=incl2;
 insst.init(incl);
  for I := 1 to strategystakesnumber do
@@ -41,13 +43,13 @@ insst.init(incl);
       begin
        sqlstr:='select min(id) from strategystake_tbl where id>'+inttostr(tempid)+' and strategy=1 and stakenumber='+inttostr(i)+';';
         tempid:=wwdb.oneinteger(sqlstr);
-        sqlstr:='sqlect id_event from strategystake_tbl where id='+inttostr(tempid)+';';
+        sqlstr:='select id_event from strategystake_tbl where id='+inttostr(tempid)+';';
          esa[j-1].idevent:=wwdb.oneinteger(sqlstr);
-         sqlstr:='sqlect id_staketype from strategystake_tbl where id='+inttostr(tempid)+';';
+         sqlstr:='select id_staketype from strategystake_tbl where id='+inttostr(tempid)+';';
          esa[j-1].idstaketype:=wwdb.oneinteger(sqlstr);
-          sqlstr:='sqlect stakeval from strategystake_tbl where id='+inttostr(tempid)+';';
+          sqlstr:='select stakeval from strategystake_tbl where id='+inttostr(tempid)+';';
          esa[j-1].stakevalue:=wwdb.onereal(sqlstr);
-            sqlstr:='sqlect margin from strategystake_tbl where id='+inttostr(tempid)+';';
+            sqlstr:='select margin from strategystake_tbl where id='+inttostr(tempid)+';';
          esa[j-1].margin:=wwdb.onereal(sqlstr);
 
       end;

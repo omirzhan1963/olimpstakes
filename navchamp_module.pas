@@ -142,6 +142,8 @@ doc:=wb.Document as ihtmldocument2;
     end;
   deletelinenumber;
   settimeofnav;
+  if (length(checkedchamp)>0) then
+
  submit;
 end;
 
