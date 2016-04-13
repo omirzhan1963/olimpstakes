@@ -6,7 +6,10 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, OleCtrls, SHDocVw, StdCtrls, ExtCtrls, login_module, globalfunc,
   navsport_module, navchamp_module, parseevent_module, insertstake_module,
-  confirmstake_module, collectinfo_module, checkbet_module, strategy1_module;
+  confirmstake_module, collectinfo_module, checkbet_module, strategy1_module,
+  parselivetennis_module, insertstakelivetennis_module, navlive_module,
+  navlivechamp_module, checkliveevent_module, livetennisstrategy_module,
+  strategybase_module;
 
 type
   TForm1 = class(TForm)
@@ -27,6 +30,14 @@ type
     Edit2: TEdit;
     Button9: TButton;
     Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Button13: TButton;
+    Button14: TButton;
+    Button15: TButton;
+    Button16: TButton;
     procedure WebBrowser1NewWindow2(ASender: TObject; var ppDisp: IDispatch;
       var Cancel: WordBool);
     procedure Button1Click(Sender: TObject);
@@ -40,6 +51,12 @@ type
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
+    procedure Button13Click(Sender: TObject);
+    procedure Button14Click(Sender: TObject);
+    procedure Button15Click(Sender: TObject);
+    procedure Button16Click(Sender: TObject);
 
   private
    incl:init_class;
@@ -84,6 +101,116 @@ implementation
 procedure TForm1.Button10Click(Sender: TObject);
 begin
 webbrowser1.Navigate('olimp.kz');
+end;
+
+procedure TForm1.Button11Click(Sender: TObject);
+var
+lt:parselivetennis_class;
+ i:integer;
+begin
+ lt:=parselivetennis_class.create;
+ initcl1;
+ lt.init(incl);
+ lt.parse;
+  for I := 0 to length(lt.lc)-1 do
+  memo1.Lines.Add(lt.lc[i].name+'='+inttostr(lt.lc[i].id));
+     for I := 0 to length(lt.le)-1 do
+  memo1.Lines.Add(lt.le[i].name+'='+inttostr(lt.le[i].id_event));
+end;
+
+procedure TForm1.Button12Click(Sender: TObject);
+var
+insst:insertstakelivetennis_class;
+begin
+insst:=insertstakelivetennis_class.Create;
+initcl1;
+insst.init(incl);
+setlength(insst.stakes,1);
+insst.stakes[0].idevent:=strtoint(edit1.Text);
+insst.stakes[0].idstaketype:=strtoint(edit2.Text);
+insst.stakes[0].stakevalue:=strtofloat(edit3.Text);
+insst.stakes[0].margin:=1.5;
+insst.insert;
+
+
+end;
+
+procedure TForm1.Button13Click(Sender: TObject);
+var
+nl:navlive_class;
+begin
+ initcl1;
+ nl:=navlive_class.create;
+ nl.init(incl);
+ nl.nav;
+end;
+
+procedure TForm1.Button14Click(Sender: TObject);
+var
+nl:navlivechamp_class;
+i:integer;
+le:liveeventar;
+cle:checkliveevent_class;
+sqlstr:string;
+begin
+ initcl1;
+ nl:=navlivechamp_class.create;
+ cle:=checkliveevent_class.create;
+ cle.init(incl);
+ nl.init(incl);
+ nl.sport:='Tennis';
+ nl.nav;
+ for I := 0 to length(nl.foundedle)-1 do
+ begin
+ memo1.Lines.Add(nl.foundedle[i].name);
+  cle.le[0].id_champ:=nl.foundedle[i].id_champ;
+   cle.le[0].name:=nl.foundedle[i].name;
+    cle.le[0].id_event:=nl.foundedle[i].id_event;
+    cle.check;
+    if ((cle.le[0].id_champ<>-1) and (cle.le[0].id_champ<>cle.checkedle[0].id_champ)) then
+     begin
+      sqlstr:='changechamp '+inttostr(cle.checkedle[0].id_champ)+','+inttostr(cle.le[0].id_champ)+';' ;
+     cle.changechamp(cle.checkedle[0].id_champ,cle.le[0].id_champ);
+     end;
+ end;
+ form1.Color:=clblue;
+end;
+
+procedure TForm1.Button15Click(Sender: TObject);
+var
+strat2:tennislive_class;
+i:integer;
+begin
+ strat2:=tennislive_class.create;
+ initcl1;
+ strat2.init(incl);
+ initcl2;
+ strat2.incl2:=incl;
+ strat2.dostrategy;
+ for I := 0 to length(strat2.temple)-1 do
+  memo1.Lines.Add(inttostr(strat2.temple[i].id_champ)+'==='+strat2.temple[i].name+'==='+inttostr(strat2.temple[i].id_event));
+  form1.color:=clblue;
+  end;
+
+procedure TForm1.Button16Click(Sender: TObject);
+var
+strat3:strategybase_class;
+incl1,incl2:init_class;
+begin
+ strat3:=strategybase_class.create;
+ strat3.strategynumber:=2;
+  incl1:=init_class.Create;
+ incl1.wb:=webbrowser1;
+ incl1.wait:=wait1;
+  incl2:=init_class.Create;
+ incl2.wb:=webbrowser2;
+ incl2.wait:=wait2;
+ strat3.incl1:=incl1;
+ strat3.incl2:=incl2;
+ strat3.init(incl1,incl2);
+ strat3.preparestrategy;
+ strat3.dostrategy;
+
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -244,7 +371,7 @@ initcl2;
 strat1:=strategy1.Create;
  strat1.incl:=incl;
  strat1.incl2:=incl2;
- strat1.strategystakesnumber:=5;
+ strat1.strategy:=1;
  strat1.dostrategy1;
 end;
 

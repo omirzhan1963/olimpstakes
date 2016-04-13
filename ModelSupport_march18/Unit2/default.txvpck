@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <view uin="k2vegny0q05xk6qci_v">
+    <property name="$defaultDiagram" value="true" />
+    <property name="$metaclass" value="Package Diagram" />
+    <property name="$name" value="default" />
+    <reference referencedUin="delphi:e_class:src:march18:Unit2.@unitclass">
+      <property name="$shortcutReference" value="true" />
+    </reference>
+    <reference referencedUin="delphi:e_class:src:march18:Unit2.tempclass">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,0,0,0" />
+    </reference>
+    <reference referencedUin="delphi:e_class:src:march18:Unit2.IPrototype">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,0,109,78" />
+      <reference referencedUin="delphi:e_method:src:march18:Unit2.IPrototype.Clone()">
+        <property name="bounds" value="0,0,0,0" />
+      </reference>
+    </reference>
+    <reference referencedUin="design:node:::jbcsqncwwtie0819n_n">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="160,0,319,94" />
+      <reference referencedUin="design:link:::dztykqh0ytile0xoo_l:jbcsqncwwtie0819n_n">
+        <property name="bounds" value="0,0,0,0" />
+        <reference referencedUin="label:@supplierRole:design:link:::dztykqh0ytile0xoo_l:jbcsqncwwtie0819n_n" />
+      </reference>
+      <reference referencedUin="design:link:::i1mpv08bqvicyqlzk_l:jbcsqncwwtie0819n_n">
+        <property name="bounds" value="0,0,0,0" />
+        <reference referencedUin="label:@supplierRole:design:link:::i1mpv08bqvicyqlzk_l:jbcsqncwwtie0819n_n" />
+      </reference>
+    </reference>
+    <reference referencedUin="delphi:e_class:src:march18:Unit2.TConcretePrototype">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,120,126,94" />
+      <reference referencedUin="delphi:e_method:src:march18:Unit2.TConcretePrototype.Create(Unit2.TConcretePrototype)">
+        <property name="bounds" value="0,0,0,0" />
+      </reference>
+      <reference referencedUin="delphi:e_method:src:march18:Unit2.TConcretePrototype.Clone()">
+        <property name="bounds" value="0,0,0,0" />
+      </reference>
+      <reference referencedUin="delphi:l_impl:src:march18:Unit2.TConcretePrototype:Unit2.IPrototype">
+        <property name="bounds" value="0,0,0,0" />
+      </reference>
+    </reference>
+  </view>
+</nodeSet>

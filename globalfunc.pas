@@ -33,6 +33,30 @@ uses
     betresult:integer;
     bstakear:betstakear;
   end;
+   livechamp=record
+     name:string;
+     id:integer;
+   end;
+   livechampar=array of livechamp;
+
+   liveevent=record
+     id_champ:integer;
+     name:string;
+     id_event:integer;
+
+   end;
+   liveeventar=array of liveevent;
+   livestakegroup=record
+     name:string;
+     id:integer;
+   end;
+       livestakegroupar=array of livestakegroup;
+       livestaketype=record
+         name:string;
+         id:integer;
+         id_event:integer;
+       end;
+       livestaketypear=array of livestaketype;
   timeofnav=(anytime,nexttwohour,nextsixhour,nexttvelwehour,nextday);
   tprocedure=procedure(millisec:integer);
   ari=array of integer;
@@ -44,6 +68,7 @@ wait:tprocedure;
 
 
     end;
+      function isolimpdate(s:string):boolean;
   function inari(index:integer;ar:ari):boolean;
   function isdigit(c:char):boolean;
    function getattr(elem:ihtmlelement):attrs;
@@ -51,7 +76,34 @@ wait:tprocedure;
     function strisint(s:string):boolean;
     function ismainchild(parentel,childel:ihtmlelement):boolean;
        function transformdate(s:string):string;
+       const
+       br:string=char(13)+char(10);
 implementation
+    function isolimpdate(s:string):boolean;
+  begin
+    result:=false;
+    if length(s)<>16 then exit;
+
+    if not isdigit(s[1]) then  exit;
+     if not isdigit(s[2]) then  exit;
+      if s[3]<>'.' then  exit;
+
+       if not isdigit(s[4]) then  exit;
+      if not isdigit(s[5]) then  exit;
+          if s[6]<>'.' then  exit;
+         if not isdigit(s[7]) then  exit;
+        if not isdigit(s[8]) then  exit;
+         if not isdigit(s[9]) then  exit;
+           if not isdigit(s[10]) then  exit;
+              if s[11]<>' ' then  exit;
+          if not isdigit(s[12]) then  exit;
+           if not isdigit(s[13]) then  exit;
+                 if s[14]<>':' then  exit;
+            if not isdigit(s[15]) then  exit;
+             if not isdigit(s[16]) then  exit;
+             result:=true;
+  end;
+
   function getattr(elem:ihtmlelement):attrs;
 var nn:OleVariant;
 j,i,cnt,cntattr:integer;

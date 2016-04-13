@@ -9,7 +9,7 @@ interface
     logstr,passstr:string;
     checked:boolean;
     currusum:integer;
-    error:integer;
+
      procedure login;
       procedure check;
       constructor create;
@@ -89,8 +89,12 @@ end;
 
 constructor login_class.create;
 begin
+inherited;
 logstr:='222800';
 passstr:='noik52ABDR';
+ermessages.Add('form not assigned in logi_class');
+ ermessages.Add('not found submit button or not fuond loginbox in login_class');
+
 end;
 
 procedure login_class.login;
@@ -100,14 +104,20 @@ inputs:ihtmlelementcollection;
 inp:ihtmlelement;
 i:integer;
 chd:integer;
+clicked:boolean;
 begin
+clicked:=false;
   doc:=wb.Document as ihtmldocument2;
   setlength(at,1);
   at[0].name:='id';
   at[0].value:='lf';
   findform(at);
-  if not assigned(form) then
+  if not assigned(form) then  error:=1;
+   if error>0 then
+   begin
+   writeer;
       exit;
+   end;
   inputs:=form.all as ihtmlelementcollection;
    chd:=0;
   inputs:=inputs.tags('INPUT') as ihtmlelementcollection;
@@ -128,8 +138,17 @@ begin
          end;
       end;
       if ((inp.className='msbtn1') and (chd=2)) then
+      begin
        inp.click;
+       clicked:=true;
+      end;
   end;
+  if not clicked then error:=2;
+   if error>0 then
+   begin
+   writeer;
+      exit;
+   end;
   wait(2000);
 
 end;

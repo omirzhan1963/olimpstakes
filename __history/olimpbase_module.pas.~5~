@@ -1,0 +1,131 @@
+unit olimpbase_module;
+
+interface
+ uses
+  SysUtils, Variants, Classes, SHDocVw,mshtml, workwithdb_module, globalfunc;
+  type
+  olimpbase_class=class
+  protected
+  wwdb:workwithdb_class;
+  wb:twebbrowser;
+  wait:tprocedure;
+  form:ihtmlelement;
+  doc:ihtmldocument2;
+  elcol:ihtmlelementcollection;
+    ermessages:tstringlist;
+  procedure findform(at:attrs);
+  public
+  error:integer;
+
+  procedure init(initcl:init_class);virtual;
+  procedure writeer;
+  procedure writeersl(sl:tstringlist);
+  constructor create;
+  end;
+
+
+
+
+implementation
+
+{ olimpbase_class }
+
+constructor olimpbase_class.create;
+begin
+inherited;
+ermessages:=tstringlist.Create;
+ermessages.Add('no errors');
+wwdb:=workwithdb_class.Create;
+end;
+
+procedure olimpbase_class.findform(at: attrs);
+var
+forms:ihtmlelementcollection;
+tform:ihtmlelement;
+i:integer;
+begin
+if not assigned(doc) then  exit;
+form:=nil;
+elcol:=doc.all;
+ forms:=elcol.tags('FORM') as ihtmlelementcollection;
+ for I := 0 to forms.length-1 do
+ begin
+   tform:=forms.item(i,0) as ihtmlelement;
+   if hasattrs(tform,at) then
+   begin
+     form:=tform;
+     exit;
+   end;
+ end;
+end;
+
+procedure olimpbase_class.init(initcl: init_class);
+begin
+wb:=initcl.wb;
+wait:=initcl.wait;
+
+
+end;
+
+procedure olimpbase_class.writeer;
+var
+tempsl:tstringlist;
+dt:tdatetime;
+dtstr:string;
+errorstr:string;
+begin
+tempsl:=tstringlist.Create;
+ tempsl.LoadFromFile('march18errors.txt');
+ dt:=now();
+ dtstr:=datetostr(dt);
+  if (error>ermessages.Count-1) then
+  begin
+   tempsl.Add('not specified error occured in time  '+dtstr);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+  exit;
+
+  end;
+  errorstr:=ermessages[error-1];
+   tempsl.Add(errorstr+' in time '+dtstr);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+end;
+
+procedure olimpbase_class.writeersl(sl: tstringlist);
+var
+tempsl:tstringlist;
+dt:tdatetime;
+dtstr:string;
+errorstr:string;
+i:integer;
+begin
+if sl.Count=0 then
+    begin
+      writeer;
+      exit;
+    end;
+tempsl:=tstringlist.Create;
+ tempsl.LoadFromFile('march18errors.txt');
+ dt:=now();
+ dtstr:=datetostr(dt);
+  if (error>ermessages.Count-1) then
+  begin
+   tempsl.Add('not specified error occured in time  '+dtstr);
+    for I := 0 to sl.Count-1 do
+    tempsl.Add(sl[i]);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+  exit;
+
+  end;
+  errorstr:=ermessages[error-1];
+   tempsl.Add(errorstr+' in time '+dtstr);
+    for I := 0 to sl.Count-1 do
+    tempsl.Add(sl[i]);
+   tempsl.SaveToFile('march18errors.txt');
+   tempsl.Free;
+
+end;
+
+end.

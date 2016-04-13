@@ -1,0 +1,39 @@
+unit strategybase_module;
+
+interface
+  uses
+  classes,sysutils,mshtml, workwithdb_module, setonestake_module, globalfunc;
+  type
+  strategybase_class=class
+  incl,incl2:init_class;
+  strategynumber:integer;
+  neededsum:integer;
+  priority:integer;
+    procedure dostrategy;virtual;
+    constructor create;
+
+    private
+    strategystakesnumber:integer;
+     sum:integer;
+    wwdb:workwithdb_class;
+    stakesari:ari;
+    esa:evstar;
+    insst:setonestake;
+  end;
+implementation
+
+{ strategybase_class }
+
+constructor strategybase_class.create;
+begin
+inherited;
+ wwdb:=workwithdb_class.create;
+ insst:=setonestake.create;
+end;
+
+procedure strategybase_class.dostrategy;
+begin
+
+end;
+
+end.

@@ -74,7 +74,23 @@
 			<DCCReference Include="strategy1_module.pas"/>
 			<DCCReference Include="collectinfo_module.pas"/>
 			<DCCReference Include="setonestake_module.pas"/>
+			<DCCReference Include="parselivetennis_module.pas"/>
+			<DCCReference Include="insertstakelivetennis_module.pas"/>
+			<DCCReference Include="navlive_module.pas"/>
+			<DCCReference Include="navlivechamp_module.pas"/>
+			<DCCReference Include="checkliveevent_module.pas"/>
+			<DCCReference Include="livetennisstrategy_module.pas"/>
+			<DCCReference Include="checkbetstakes_module.pas"/>
+			<DCCReference Include="checkonebetstake_module.pas"/>
+			<DCCReference Include="choicestrategy_module.pas"/>
+			<DCCReference Include="parseresult_module.pas"/>
+			<DCCReference Include="tempclass.pas"/>
 			<None Include="Profiling\AQtimeModule1.aqt"/>
+			<None Include="ModelSupport_march18\default.txaPackage"/>
+			<None Include="ModelSupport_march18\default.txvpck"/>
+			<None Include="ModelSupport_march18\Unit2\default.txvpck"/>
+			<None Include="ModelSupport_march18\march18\default.txvpck"/>
+			<None Include="ModelSupport_march18\Unit2\default.txaPackage"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -128,6 +144,7 @@
 				<Platforms>
 					<Platform value="Win32">True</Platform>
 				</Platforms>
+				<ModelSupport>True</ModelSupport>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
 		</ProjectExtensions>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <node uin="jbcsqncwwtie0819n_n">
+    <property name="$metaclass" value="Pattern" />
+    <property name="$name" value="Prototype" />
+    <property name="PatternUPID" value="{2004-11-30-7-31-41-186-49222}" />
+    <link uin="dztykqh0ytile0xoo_l">
+      <property name="$metaclass" value="DesignPatternLink" />
+      <property name="$name" value="IPrototype" />
+      <property name="@supplierRole" value="_Prototype" />
+      <participant referencedUin="design:node:::jbcsqncwwtie0819n_n" role="Client" />
+      <participant referencedUin="delphi:e_class:src:march18:Unit2.IPrototype" role="Supplier" />
+    </link>
+    <link uin="i1mpv08bqvicyqlzk_l">
+      <property name="$metaclass" value="DesignPatternLink" />
+      <property name="$name" value="TConcretePrototype" />
+      <property name="@supplierRole" value="_ConcretePrototype" />
+      <participant referencedUin="design:node:::jbcsqncwwtie0819n_n" role="Client" />
+      <participant referencedUin="delphi:e_class:src:march18:Unit2.TConcretePrototype" role="Supplier" />
+    </link>
+  </node>
+</nodeSet>

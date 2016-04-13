@@ -1,0 +1,48 @@
+unit parselivetennis_module;
+
+interface
+  uses
+   SysUtils, Variants, Classes, SHDocVw,mshtml, workwithdb_module, globalfunc,
+  olimpbase_module,RegularExpressions;
+   type
+   staketemp=record
+     sttype:string;
+     stval:string;
+
+
+   end;
+   stakestemp=array of staketemp;
+   livechamp=record
+     name:string;
+     id:integer;
+   end;
+   liveevent=record
+     id_champ:integer;
+     name:string;
+     id_event:integer;
+
+   end;
+   parselivetennis_class=class(olimpbase_class)
+   checkedchamp
+    procedure parse;
+    private
+    id_sport,id_champ,id_event:integer;
+    id_com1,id_com2:integer;
+    id_stakegroup:integer;
+    olimpdate:string;
+    sts:stakestemp;
+    com1,com2:string;
+    odate:string;
+    mcchecked:boolean;
+    checkedchamp:ari;
+    procedure parsemc(tr:ihtmlelement);
+      procedure parsehi(tr:ihtmlelement);
+     procedure parsetr (tr:ihtmlelement);
+     procedure parsenobr(nbr:ihtmlelement);
+    procedure insertstakeindb;
+    procedure parseinnerb(s:string);
+    procedure parseeventstr(s:string);
+   end;
+implementation
+
+end.

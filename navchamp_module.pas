@@ -85,6 +85,7 @@ constructor navchamp_class.create;
 begin
 inherited;
 tn:=anytime;
+ermessages.Add('not found form in navchamp_class');
 end;
 
 procedure navchamp_class.deletelinenumber;
@@ -123,7 +124,12 @@ doc:=wb.Document as ihtmldocument2;
   at[0].name:='name';
   at[0].value:='BetLine';
   findform(at);
-  if not assigned(form) then exit;
+  if not assigned(form) then error:=1;
+   if error>0 then
+   begin
+   writeer;
+      exit;
+   end;
    trs:=form.all   as ihtmlelementcollection;
    trs:=trs.tags('TR')     as ihtmlelementcollection;
    for I := 0 to trs.length-1 do

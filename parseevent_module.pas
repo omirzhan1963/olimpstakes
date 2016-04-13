@@ -13,7 +13,10 @@ interface
    end;
    stakestemp=array of staketemp;
    parseevent_class=class(olimpbase_class)
+   public
+           checkedchamp:ari;
     procedure parse;
+
     private
     id_sport,id_champ,id_event:integer;
     id_com1,id_com2:integer;
@@ -23,7 +26,7 @@ interface
     com1,com2:string;
     odate:string;
     mcchecked:boolean;
-    checkedchamp:ari;
+
     procedure parsemc(tr:ihtmlelement);
       procedure parsehi(tr:ihtmlelement);
      procedure parsetr (tr:ihtmlelement);
@@ -33,30 +36,6 @@ interface
     procedure parseeventstr(s:string);
    end;
 implementation
-  function isolimpdate(s:string):boolean;
-  begin
-    result:=false;
-    if length(s)<>16 then exit;
-
-    if not isdigit(s[1]) then  exit;
-     if not isdigit(s[2]) then  exit;
-      if s[3]<>'.' then  exit;
-
-       if not isdigit(s[4]) then  exit;
-      if not isdigit(s[5]) then  exit;
-          if s[6]<>'.' then  exit;
-         if not isdigit(s[7]) then  exit;
-        if not isdigit(s[8]) then  exit;
-         if not isdigit(s[9]) then  exit;
-           if not isdigit(s[10]) then  exit;
-              if s[11]<>' ' then  exit;
-          if not isdigit(s[12]) then  exit;
-           if not isdigit(s[13]) then  exit;
-                 if s[14]<>':' then  exit;
-            if not isdigit(s[15]) then  exit;
-             if not isdigit(s[16]) then  exit;
-             result:=true;
-  end;
  
 
 { parseevent_class }
@@ -214,14 +193,14 @@ end;
 procedure parseevent_class.parsemc(tr: ihtmlelement);
 var
 s,sqlstr:string;
-br:string;
+
 i,k:integer;
 begin
  s:=tr.innerText;
  mcchecked:=false;
  if pos('Outrights',s)>0 then  exit;
 
-  br:=char(10)+char(13);
+
   i:=pos(br,s);
   if i>0 then  s:=copy(s,1,i-1);
   s:=trim(s);
@@ -235,10 +214,14 @@ begin
   sqlstr:='findchamp N'''+sqlstr+''','+inttostr(id_sport)+';';
 
   id_champ:=wwdb.oneinteger(sqlstr);
-  if id_champ>0 then mcchecked:=true;
+  if id_champ>0 then
+  begin
+   mcchecked:=true;
     k:=length(checkedchamp);
         setlength(checkedchamp,k+1);
         checkedchamp[k]:=id_champ;
+  end;
+
 end;
 
 procedure parseevent_class.parsenobr(nbr: ihtmlelement);

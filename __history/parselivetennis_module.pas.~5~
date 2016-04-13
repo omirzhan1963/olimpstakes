@@ -1,0 +1,164 @@
+unit parselivetennis_module;
+
+interface
+  uses
+   SysUtils, Variants, Classes, SHDocVw,mshtml, workwithdb_module, globalfunc,
+  olimpbase_module,RegularExpressions;
+   type
+   staketemp=record
+     sttype:string;
+     stval:string;
+
+
+   end;
+   stakestemp=array of staketemp;
+
+   parselivetennis_class=class(olimpbase_class)
+   lc:livechampar;
+   le:liveeventar;
+   lsg:livestakegroupar;
+    lst:livestaketypear;
+    procedure parse;
+    private
+    id_sport,id_champ,id_event:integer;
+    id_com1,id_com2:integer;
+    id_stakegroup:integer;
+    olimpdate:string;
+    sts:stakestemp;
+    com1,com2:string;
+    odate:string;
+    mcchecked:boolean;
+    checkedchamp:ari;
+    procedure parsemc(tr:ihtmlelement);
+      procedure parsehi(tr:ihtmlelement);
+     procedure parsetr (tr:ihtmlelement);
+     procedure parsenobr(nbr:ihtmlelement);
+    procedure insertstakeindb;
+    procedure parseinnerb(s:string);
+    procedure parseeventstr(s:string);
+   end;
+implementation
+
+{ parselivetennis_class }
+
+procedure parselivetennis_class.insertstakeindb;
+begin
+
+end;
+
+procedure parselivetennis_class.parse;
+var
+at:attrs;
+ trs,tds,inputs:ihtmlelementcollection;
+ tr,td,inp:ihtmlelement;
+ i,j,champind:integer;
+ sqlstr:string;
+
+begin
+  mcchecked:=false;
+     setlength(checkedchamp,0);
+doc:=wb.Document as ihtmldocument2;
+  setlength(at,1);
+  at[0].name:='name';
+  at[0].value:='BetLine';
+  findform(at);
+  if not assigned(form) then exit;
+  trs:=form.all as ihtmlelementcollection;
+  trs:=trs.tags('TR')as ihtmlelementcollection;
+  for I := 0 to trs.length-1 do
+    begin
+      tr:=trs.item(i,0) as ihtmlelement;
+      if tr.className='m_c' then
+      begin
+        parsemc(tr);
+if error>0 then exit;
+
+        continue;
+      end;
+      if not mcchecked then  continue;
+
+       if tr.className='hi' then
+      begin
+        parsehi(tr);
+if error>90 then exit;
+
+        continue;
+      end;
+      parsetr(tr);
+    end;
+
+end;
+
+procedure parselivetennis_class.parseeventstr(s: string);
+begin
+
+end;
+
+procedure parselivetennis_class.parsehi(tr: ihtmlelement);
+begin
+
+end;
+
+procedure parselivetennis_class.parseinnerb(s: string);
+begin
+
+end;
+
+procedure parselivetennis_class.parsemc(tr: ihtmlelement);
+var
+s,sqlstr:string;
+i,k:integer;
+begin
+mcchecked:=false;
+  s:=tr.innerText;
+ i:=pos(br,s);
+ if i>0 then
+ s:=copy(s,1,i-1);
+ s:=trim(s);
+  i:=pos('Tennis.',s);
+  if i<4 then error:=2;
+  if error>0  then
+  begin
+    writeer;
+    exit;
+  end;
+  s:=copy(s,1,i+6);
+  s:=trim(s);
+
+  for I := 0 to length(lc)-1 do
+   begin
+     if lc[i].name=s then
+       begin
+       id_champ:=lc[i].id;
+         mcchecked:=true;
+
+         exit;
+
+       end;
+
+   end;
+
+
+    sqlstr:='findchamp N'''+s+''',1;';
+      id_champ:=wwdb.oneinteger(sqlstr);
+  if id_champ>0 then
+  begin
+  mcchecked:=true;
+    k:=length(lc);
+        setlength(lc,k+1);
+        lc[k].id:=id_champ;
+        lc[k].name:=s;
+  end;
+end;
+
+procedure parselivetennis_class.parsenobr(nbr: ihtmlelement);
+begin
+
+end;
+
+procedure parselivetennis_class.parsetr(tr: ihtmlelement);
+begin
+
+end;
+
+end.

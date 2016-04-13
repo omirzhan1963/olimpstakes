@@ -1,0 +1,82 @@
+unit strategybase_module;
+
+interface
+  uses
+  classes,sysutils,mshtml, workwithdb_module, setonestake_module, globalfunc,
+  olimpbase_module, login_module;
+  type
+  strategybase_class=class(olimpbase_class)
+  incl1,incl2:init_class;
+  strategynumber:integer;
+  neededsum:integer;
+  priority:integer;
+    procedure dostrategy;virtual;
+    constructor create;
+    procedure init(inclvar1,inclvar2:init_class);overload;
+    private
+    strategystakesnumber:integer;
+     sum:integer;
+    wwdb:workwithdb_class;
+    stakesari:ari;
+    esa:evstar;
+    insst:setonestake;
+    l:login_class;
+    procedure firstcheck;
+  end;
+implementation
+
+{ strategybase_class }
+
+constructor strategybase_class.create;
+begin
+inherited;
+
+ insst:=setonestake.create;
+ l:=login_class.create;
+end;
+
+procedure strategybase_class.dostrategy;
+begin
+
+end;
+
+procedure strategybase_class.firstcheck;
+
+var
+s:string;
+
+begin
+s:=wb.LocationURL;
+if pos('olimp',s)<1 then
+ begin
+   wb.Navigate('olimp.kz');
+   wait(4000);
+
+ end;
+  l.check;
+  if not l.checked then
+  begin
+    l.login;
+    wait(4000);
+     l.check;
+     if not l.checked then
+      begin
+        error:=1;
+
+      end;
+  end;
+
+
+end;
+
+procedure strategybase_class.init(inclvar1, inclvar2: init_class);
+begin
+incl1:=inclvar1;
+incl2:=inclvar2;
+l.init(inclvar1);
+insst.init(inclvar1,inclvar2);
+wb:=inclvar1.wb;
+wait:=inclvar1.wait;
+end;
+
+end.

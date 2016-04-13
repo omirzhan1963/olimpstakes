@@ -11,7 +11,7 @@ interface
 
   function getbetrec:betrecord;
   function getfirst:betrecord;
-
+  constructor create;
 
   private
           firstinpage:integer;
@@ -30,9 +30,9 @@ interface
   tempid_stakegroup,tempid_staketype:integer;
    tempstakeval:string;
    tempstatus:string;
-  procedure parsepage;
+
    procedure parsemaintr(tr:ihtmlelement);
-       procedure findfirstnumber;
+
        procedure navigatefirst;
       procedure navtopage(pagenumber:integer);
 
@@ -58,35 +58,15 @@ interface
 
 { checkbet_class }
 
-procedure checkbet_class.findfirstnumber;
-var
-i:integer;
-tables,btags: ihtmlelementcollection;
-tbl,btag:ihtmlelement;
- s:string;
+constructor checkbet_class.create;
 begin
-  doc:=wb.Document as ihtmldocument2;
-     elcol:=doc.all;
-    tables:=elcol.tags('TABLE') as ihtmlelementcollection;
-    firsttbl:=tables.item(ftblindex,0) as ihtmlelement ;
-     btags:=firsttbl.all as ihtmlelementcollection;
-    btag:=btags.item(0,0) as ihtmlelement ;
-    s:=btag.innerText;
-    i:=pos('#',s);
-     if i<1 then  error:=3;
-     if error>0  then  exit;
-     delete(s,1,i);
-     s:=trim(s);
-     i:=pos('.',s);
-     if i<1  then  error:=3;
-        if error>0  then  exit;
-      s:=copy(s,1,i-1);
-      s:=trim(s);
-      if not strisint(s) then  error:=3;
-       if error>0  then  exit;
-      firstinpage:=strtoint(s);
+ inherited;
+   ftblindex:=15;
+ ermessages.Add('incorrect bet number in checkbet_class');
 
 end;
+
+
 
 procedure checkbet_class.findmaintbl;
   var
@@ -112,8 +92,12 @@ begin
 error:=0;
 getfirst;
 firstinpage:=fbr.betnum;
-if ((firstinpage-betnumber)<0) or ((firstinpage-betnumber)>100) then   error:=4;
-if error>0 then  exit;
+if ((firstinpage-betnumber)<0) or ((firstinpage-betnumber)>100) then   error:=1;
+if error>0 then
+begin
+writeer;
+ exit;
+end;
 i:=floor((firstinpage-betnumber)/10);
 i:=i+1;
 navtopage(i);
@@ -142,7 +126,7 @@ var
 tr:ihtmlelement;
 begin
 navigatefirst;
-ftblindex:=15;
+
   findmaintbl;
 
      tr:=maintrs.item(1,0) as ihtmlelement;
@@ -441,10 +425,7 @@ setlength(fbr.bstakear,0);
     end;
 end;
 
-procedure checkbet_class.parsepage;
-begin
 
-end;
 
 procedure checkbet_class.parsesmalltbl(tbl: ihtmlelement);
 var

@@ -6,10 +6,11 @@ interface
   type
   strategy1=class
   incl,incl2:init_class;
+  strategy:integer;
      strategystakesnumber:integer;
     procedure dostrategy1;
     private
-
+     sum:integer;
     wwdb:workwithdb_class;
     stakesari:ari;
     esa:evstar;
@@ -33,15 +34,19 @@ if not assigned(insst) then
 insst:=setonestake.create;
 insst.incl2:=incl2;
 insst.init(incl);
+sqlstr:='select count(stakenumber) from strategystake_tbl where strategy='+inttostr(strategy)+';';
+  strategystakesnumber:=wwdb.oneinteger(sqlstr);
  for I := 1 to strategystakesnumber do
   begin
-  sqlstr:='select count(id_event) from strategystake_tbl where strategy=1 and stakenumber='+inttostr(i)+';';
+  sqlstr:='select count(id_event) from strategystake_tbl where strategy='+inttostr(strategy)+' and stakenumber='+inttostr(i)+';';
    k:=wwdb.oneinteger(sqlstr);
+   sqlstr:='select min(sum) from strategystake_tbl where strategy='+inttostr(strategy)+' and stakenumber='+inttostr(i)+';';
+    sum:=wwdb.oneinteger(sqlstr);
    setlength(esa,k);
    tempid:=0;
    for j := 1 to k do
       begin
-       sqlstr:='select min(id) from strategystake_tbl where id>'+inttostr(tempid)+' and strategy=1 and stakenumber='+inttostr(i)+';';
+       sqlstr:='select min(id) from strategystake_tbl where id>'+inttostr(tempid)+' and strategy='+inttostr(strategy)+' and stakenumber='+inttostr(i)+';';
         tempid:=wwdb.oneinteger(sqlstr);
         sqlstr:='select id_event from strategystake_tbl where id='+inttostr(tempid)+';';
          esa[j-1].idevent:=wwdb.oneinteger(sqlstr);
@@ -54,7 +59,7 @@ insst.init(incl);
 
       end;
       insst.esa:=esa;
-      insst.sum:=10;
+      insst.sum:=sum;
       insst.insertstake;
 
   end;

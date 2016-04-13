@@ -12,14 +12,16 @@ interface
   form:ihtmlelement;
   doc:ihtmldocument2;
   elcol:ihtmlelementcollection;
+    ermessages:tstringlist;
   procedure findform(at:attrs);
   public
   error:integer;
-  ermessages:tstringlist;
+
   procedure init(initcl:init_class);virtual;
   procedure writeer;
   procedure writeersl(sl:tstringlist);
   constructor create;
+  procedure checker;
   end;
 
 
@@ -29,12 +31,22 @@ implementation
 
 { olimpbase_class }
 
+procedure olimpbase_class.checker;
+begin
+if error>0 then
+begin
+  writeer;
+  abort;
+end;
+end;
+
 constructor olimpbase_class.create;
 begin
 inherited;
 ermessages:=tstringlist.Create;
 ermessages.Add('no errors');
 wwdb:=workwithdb_class.Create;
+error:=0;
 end;
 
 procedure olimpbase_class.findform(at: attrs);
@@ -76,10 +88,10 @@ begin
 tempsl:=tstringlist.Create;
  tempsl.LoadFromFile('march18errors.txt');
  dt:=now();
- dtstr:=datetostr(dt);
+ dtstr:=datetimetostr(dt);
   if (error>ermessages.Count-1) then
   begin
-   tempsl.Add('not specified error occured in time  '+dtstr);
+   tempsl.Add('not specified error occured in class '+self.ClassName+' in time  '+dtstr);
    tempsl.SaveToFile('march18errors.txt');
    tempsl.Free;
   exit;
@@ -107,10 +119,10 @@ if sl.Count=0 then
 tempsl:=tstringlist.Create;
  tempsl.LoadFromFile('march18errors.txt');
  dt:=now();
- dtstr:=datetostr(dt);
+ dtstr:=datetimetostr(dt);
   if (error>ermessages.Count-1) then
   begin
-   tempsl.Add('not specified error occured in time  '+dtstr);
+   tempsl.Add('not specified error occured '+self.ClassName+' in time  '+dtstr);
     for I := 0 to sl.Count-1 do
     tempsl.Add(sl[i]);
    tempsl.SaveToFile('march18errors.txt');

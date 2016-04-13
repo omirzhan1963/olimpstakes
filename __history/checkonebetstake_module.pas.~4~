@@ -1,0 +1,134 @@
+unit checkonebetstake_module;
+
+interface
+  uses
+ classes,sysutils, olimpbase_module, globalfunc, checkbet_module,
+  confirmstake_module, insertstake_module, login_module, navchamp_module,
+  navsport_module, parseevent_module, workwithdb_module;
+ type
+ checkonebetstake_class=class(olimpbase_class)
+   incl1,incl2:init_class;
+      est:evst;
+      l:login_class;
+       ns:navsport_class;
+  nc:navchamp_class;
+  pe:parseevent_class;
+  insst:insertstake_class;
+  cs:confirmstake_class;
+  cb:checkbet_class;
+
+      procedure firstcheck;
+      procedure checonekbetstake;
+      procedure init(inclvar1,inclvar2:init_class);overload;
+      constructor create;
+      private
+      id_champ,id_sport:integer;
+      trueid_champ,trueid_sport:integer;
+ end;
+implementation
+
+{ checkonebetstake_class }
+
+procedure checkonebetstake_class.checonekbetstake;
+begin
+
+end;
+
+constructor checkonebetstake_class.create;
+begin
+   inherited;
+     l:=login_class.create;
+       ns:=navsport_class.create;
+  nc:=navchamp_class.create;
+  pe:=parseevent_class.create;;
+  insst:=insertstake_class.create;
+  cs:=confirmstake_class.create;
+  cb:=checkbet_class.create;
+
+end;
+
+procedure checkonebetstake_class.firstcheck;
+var
+s,sqlstr:string;
+i:integer;
+begin
+s:=wb.LocationURL;
+if pos('olimp',s)<1 then
+ begin
+   wb.Navigate('olimp.kz');
+   wait(4000);
+
+ end;
+  l.check;
+  if not l.checked then
+  begin
+    l.login;
+    wait(4000);
+     l.check;
+     if not l.checked then
+      begin
+        error:=1;
+
+      end;
+  end;
+  if error>0 then
+   begin
+     writeer;
+     exit;
+   end;
+ sqlstr:='select id_champ from event_tbl where id_event='+inttostr(est.idevent)+';';
+  id_champ:=wwdb.oneinteger(sqlstr);
+  sqlstr:='select min(id_sport) from champ_syn_tbl where id_champ='+inttostr(id_champ)+';';
+  id_sport:=wwdb.oneinteger(sqlstr);
+   setlength(ns.sportari,1);
+   ns.sportari[0]:=id_sport;
+   ns.nav;
+   if ns.error>0 then error:=2;
+    if error>0 then
+   begin
+     writeer;
+     exit;
+   end;
+   wait(2000);
+
+    setlength(nc.champari,1);
+   nc.champari[0]:=id_champ;
+   nc.nav;
+   if nc.error>0 then error:=3;
+    if error>0 then
+   begin
+     writeer;
+     exit;
+   end;
+   wait(2000);
+   pe.parse;
+   if pe.error>0 then error:=4;
+    if error>0 then
+   begin
+     writeer;
+     exit;
+   end;
+  trueid_champ:=pe.
+
+
+
+end;
+
+procedure checkonebetstake_class.init(inclvar1, inclvar2: init_class);
+begin
+  wb:=inclvar1.wb;
+  wait:=incl1.wait;
+  l.init(inclvar1);
+  ns.init(inclvar1);
+  nc.init(inclvar1);
+  pe.init(inclvar1);
+  insst.init(inclvar1);
+  cs.init(inclvar2);
+  cb.init(inclvar1);
+  wwdb:=workwithdb_class.create;
+  wait:=inclvar1.wait;
+
+
+end;
+
+end.

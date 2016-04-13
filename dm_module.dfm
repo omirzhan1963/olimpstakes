@@ -3,9 +3,11 @@ object DataModule1: TDataModule1
   Height = 341
   Width = 411
   object ADOConnection1: TADOConnection
+    Connected = True
     ConnectionString = 
       'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
       'fo=False;Initial Catalog=sport;Data Source=OLEG-PC\SQLEXPRESS'
+    LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 72
     Top = 40

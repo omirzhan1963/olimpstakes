@@ -14,14 +14,16 @@ interface
    stakestemp=array of staketemp;
     insertstake_class=class(olimpbase_class)
     stakes:evstar;
-
+    strictsubmit:boolean;
     procedure insert;
+    constructor create;
     private
      id_sport,id_champ,id_event:integer;
     id_com1,id_com2:integer;
     id_stakegroup:integer;
     submitbtn:ihtmlelement;
     submitbtnsettled:boolean;
+    stakesinserted:evstar;
     olimpdate:string;
     sts:stakestemp;
     com1,com2:string;
@@ -72,6 +74,13 @@ implementation
 
 { insertstake_class }
 
+constructor insertstake_class.create;
+begin
+inherited;
+ermessages.Add('form not found in insertstake_class');
+ermessages.Add('not enough stakes checked in insetrstake_class');
+end;
+
 procedure insertstake_class.insert;
 var
 at:attrs;
@@ -82,7 +91,7 @@ at:attrs;
 
 begin
 
-
+ setlength(stakesinserted,0);
  mcchecked:=false;
  submitbtnsettled:=false;
  stakechecked:=false;
@@ -94,7 +103,12 @@ doc:=wb.Document as ihtmldocument2;
   at[0].name:='name';
   at[0].value:='BetLine';
   findform(at);
-  if not assigned(form) then exit;
+  if not assigned(form) then error:=1;
+       if error>0 then
+       begin
+         writeer;
+         exit;
+       end;
   trs:=form.all as ihtmlelementcollection;
   trs:=trs.tags('TR')as ihtmlelementcollection;
   for I := 0 to trs.length-1 do
@@ -121,6 +135,15 @@ if error>90 then
       parsetr(tr);
     end;
     wait(200);
+    if strictsubmit then
+     begin
+       if length(stakesinserted)<length(stakes) then error:=2;
+       if error>0 then
+       begin
+         writeer;
+         exit;
+       end;
+     end;
  if stakechecked then
  submitbtn.click;
 
@@ -128,7 +151,7 @@ end;
 
 procedure insertstake_class.insertstake(nbr:ihtmlelement);
 var
-i,j,id_staketype:integer;
+i,j,id_staketype,k:integer;
 sqlstr,st,sv:string;
 inputs:ihtmlelementcollection;
 inp:ihtmlelement;
@@ -148,6 +171,10 @@ begin
          inp:=inputs.item(0,0) as ihtmlelement;
           inp.setAttribute('checked',true,0);
            stakechecked:=true;
+           k:=length( stakesinserted );
+           setlength(stakesinserted,k+1);
+           stakesinserted[k]:=stakes[j];
+
            exit;
         end;
      end;
@@ -168,6 +195,10 @@ for j := 0 to length(stakes)-1 do
          inp:=inputs.item(i,0) as ihtmlelement;
           inp.setAttribute('checked',true,0);
            stakechecked:=true;
+           k:=length( stakesinserted );
+           setlength(stakesinserted,k+1);
+           stakesinserted[k]:=stakes[j];
+
            exit;
         end;
      end;
@@ -250,6 +281,7 @@ procedure insertstake_class.parseinnerb(s: string);
 var
 sqlstr:string;
 begin
+    s:=stringreplace(s,'''','$$$',[rfreplaceall]);
  sqlstr:='findstakegroup N'''+s+''','+inttostr(id_sport)+';';
  id_stakegroup:=wwdb.oneinteger(sqlstr);
 
@@ -260,7 +292,7 @@ var
 s,sqlstr:string;
 inputs:ihtmlelementcollection;
 inp:ihtmlelement ;
-br:string;
+
 i:integer;
 test:string;
 begin
@@ -275,7 +307,7 @@ begin
        test:=submitbtn.getAttribute('value',0);
       submitbtnsettled:=true;
     end;
-  br:=char(10)+char(13);
+
   i:=pos(br,s);
   if i>0 then  s:=copy(s,1,i-1);
   s:=trim(s);

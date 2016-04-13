@@ -1,0 +1,76 @@
+unit navlivechamp_module;
+
+interface
+ uses
+   SysUtils, Variants, Classes, SHDocVw,mshtml, workwithdb_module, globalfunc,
+  olimpbase_module;
+   type
+   navlivechamp_class=class(olimpbase_class)
+  sport:string;
+  le:liveeventar;
+  foundedle:liveeventar;
+
+   procedure nav;
+   constructor create;
+   private
+
+   procedure submit;
+    function checkeventstr(s:string):boolean;
+   procedure deletelinenumber;
+
+
+
+
+
+   end;
+
+implementation
+
+{ navlivechamp_class }
+
+function navlivechamp_class.checkeventstr(s: string): boolean;
+var
+i,k:integer;
+begin
+result:=false;
+k:=length(foundedle);
+  i:=pos(br,s);
+  if i>0 then delete(s,i,100);
+  s:=trim(s);
+  for I := 0 to length(le)-1 do
+     if le[i].name=s then
+     begin
+       setlength(foundedle,k+1);
+       foundedle[k].id_champ:=le[i].id_champ;
+       foundedle[k].name:=s;
+       foundedle[k].id_event:=le[i].id_event;
+       result:=true;
+       exit;
+     end;
+       setlength(foundedle,k+1);
+       foundedle[k].id_champ:=-1;
+       foundedle[k].name:=s;
+       foundedle[k].id_event:=-1;
+end;
+
+constructor navlivechamp_class.create;
+begin
+
+end;
+
+procedure navlivechamp_class.deletelinenumber;
+begin
+
+end;
+
+procedure navlivechamp_class.nav;
+begin
+
+end;
+
+procedure navlivechamp_class.submit;
+begin
+
+end;
+
+end.

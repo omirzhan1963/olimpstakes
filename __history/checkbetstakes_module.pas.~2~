@@ -1,0 +1,21 @@
+unit checkbetstakes_module;
+
+interface
+ uses
+ classes,sysutils, olimpbase_module, globalfunc;
+ type
+ checkbetstakes_class=class(olimpbase_class)
+   incl1,incl2:init_class;
+      esa:evstar;
+      procedure checkbetstakes;
+ end;
+implementation
+
+{ checkbetstakes_class }
+
+procedure checkbetstakes_class.checkbetstakes;
+begin
+
+end;
+
+end.

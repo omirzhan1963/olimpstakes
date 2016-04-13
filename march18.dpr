@@ -17,7 +17,18 @@ uses
   strategybase_module in 'strategybase_module.pas',
   strategy1_module in 'strategy1_module.pas',
   collectinfo_module in 'collectinfo_module.pas',
-  setonestake_module in 'setonestake_module.pas';
+  setonestake_module in 'setonestake_module.pas',
+  parselivetennis_module in 'parselivetennis_module.pas',
+  insertstakelivetennis_module in 'insertstakelivetennis_module.pas',
+  navlive_module in 'navlive_module.pas',
+  navlivechamp_module in 'navlivechamp_module.pas',
+  checkliveevent_module in 'checkliveevent_module.pas',
+  livetennisstrategy_module in 'livetennisstrategy_module.pas',
+  checkbetstakes_module in 'checkbetstakes_module.pas',
+  checkonebetstake_module in 'checkonebetstake_module.pas',
+  choicestrategy_module in 'choicestrategy_module.pas',
+  parseresult_module in 'parseresult_module.pas',
+  tempclass in 'tempclass.pas';
 
 {$R *.res}
 

@@ -7,7 +7,7 @@ interface
    type
    navsport_class=class(olimpbase_class)
    sportari:ari;
-
+      constructor create;
    procedure nav;
    private
    procedure submit;
@@ -24,6 +24,12 @@ implementation
 
 { navsport_class }
 
+constructor navsport_class.create;
+begin
+inherited;
+ ermessages.Add('form not found in navsport_class');
+end;
+
 procedure navsport_class.nav;
 var
 at:attrs;
@@ -38,7 +44,12 @@ doc:=wb.Document as ihtmldocument2;
   at[0].name:='id';
   at[0].value:='shline';
   findform(at);
-  if not assigned(form) then exit;
+  if not assigned(form) then error:=1;
+   if error>0 then
+   begin
+   writeer;
+      exit;
+   end;
    trs:=form.all   as ihtmlelementcollection;
    trs:=trs.tags('TR')     as ihtmlelementcollection;
    for I := 0 to trs.length-1 do

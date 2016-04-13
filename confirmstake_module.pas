@@ -11,7 +11,7 @@ interface
    sum:integer;
    stakes:evstar;
    confirmed:boolean;
-
+    constructor create;
    procedure confirm;
    procedure check;
    private
@@ -54,7 +54,13 @@ tbl,el:ihtmlelement;
 i:integer;
 teststr:string;
 begin
- if length(stakes)=0 then  exit;
+ if length(stakes)=0 then  error:=1;
+ if error>0 then
+ begin
+ writeer;
+ exit;
+ end;
+
   if length(stakes)=1 then
   combobet:=false
   else
@@ -95,6 +101,12 @@ begin
 
   wait(2000);
   check;
+end;
+
+constructor confirmstake_class.create;
+begin
+inherited;
+ermessages.Add('stakes not settled in confirmstake_class') ;
 end;
 
 procedure confirmstake_class.parsecoeftable;

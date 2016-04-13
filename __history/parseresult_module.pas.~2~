@@ -1,0 +1,72 @@
+unit parseresult_module;
+
+interface
+  uses
+  classes,mshtml, olimpbase_module;
+  type
+  parseresult_class=class(olimpbase_class)
+  procedure parseresult(idevent:integer);overload;
+  procedure parseresult(evdate:tdate;idsport:integer);overload;
+
+  private
+  id_champ,id_sport:integer;
+  evdate:tdate;
+  maintable,smalltable:ihtmlelement;
+  procedure  checkfirst;
+  procedure navresultpage;
+  procedure navdateandsport(date:tdate;id_sport:integer);
+  procedure checkmc(tr:ihtmlelement);
+  procedure checktr(tr:ihtmlelement);
+  procedure checkfirsttd(td:ihtmlelement);
+  procedure checksecondtd(td:ihtmlelement);
+  end;
+implementation
+
+{ parseresult_class }
+
+procedure parseresult_class.checkfirst;
+begin
+
+end;
+
+procedure parseresult_class.checkfirsttd(td: ihtmlelement);
+begin
+
+end;
+
+procedure parseresult_class.checkmc(tr: ihtmlelement);
+begin
+
+end;
+
+procedure parseresult_class.checksecondtd(td: ihtmlelement);
+begin
+
+end;
+
+procedure parseresult_class.checktr(tr: ihtmlelement);
+begin
+
+end;
+
+procedure parseresult_class.navdateandsport(date: tdate; id_sport: integer);
+begin
+
+end;
+
+procedure parseresult_class.navresultpage;
+begin
+
+end;
+
+procedure parseresult_class.parseresult(idevent: integer);
+begin
+
+end;
+
+procedure parseresult_class.parseresult(evdate: tdate; idsport: integer);
+begin
+
+end;
+
+end.
