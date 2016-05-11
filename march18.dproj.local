@@ -2,8 +2,8 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2016/03/18 22:38:12.000.201,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2016/03/18 22:38:56.000.750,C:\Users\Oleg\Documents\RAD Studio\Projects\mainmarch18.dfm=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
     <Transaction>2016/03/18 22:38:56.000.750,C:\Users\Oleg\Documents\RAD Studio\Projects\mainmarch18.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2016/03/18 22:38:56.000.750,C:\Users\Oleg\Documents\RAD Studio\Projects\mainmarch18.dfm=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
     <Transaction>2016/03/18 22:39:06.000.841,C:\Users\Oleg\Documents\RAD Studio\Projects\march18.dproj=C:\Users\Oleg\Documents\RAD Studio\Projects\Project1.dproj</Transaction>
     <Transaction>2016/03/18 22:45:07.000.235,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:45:25.000.177,C:\Users\Oleg\Documents\RAD Studio\Projects\globalfunc.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
@@ -20,8 +20,8 @@
     <Transaction>2016/03/18 22:48:19.000.831,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:49:04.000.401,C:\Users\Oleg\Documents\RAD Studio\Projects\parseevent_module.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:49:55.000.550,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2016/03/18 22:52:07.000.953,C:\Users\Oleg\Documents\RAD Studio\Projects\dm_module.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:52:07.000.953,C:\Users\Oleg\Documents\RAD Studio\Projects\dm_module.dfm=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2016/03/18 22:52:07.000.953,C:\Users\Oleg\Documents\RAD Studio\Projects\dm_module.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:52:24.000.636,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:53:02.000.688,C:\Users\Oleg\Documents\RAD Studio\Projects\insertstake_module.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2016/03/18 22:53:08.000.306,=C:\Users\Oleg\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
@@ -60,12 +60,13 @@
     <Transaction>2016/04/10 15:52:35.000.630,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas</Transaction>
     <Transaction>2016/04/10 15:53:19.000.248,C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\parseresult.pas</Transaction>
     <Transaction>2016/04/10 15:54:29.000.377,C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\parseresult.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\parseresult_module.pas</Transaction>
-    <Transaction>2016/04/12 16:02:56.499,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas</Transaction>
-    <Transaction>2016/04/12 16:03:56.455,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\default.txaPackage</Transaction>
-    <Transaction>2016/04/12 16:04:02.013,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\default.txvpck</Transaction>
-    <Transaction>2016/04/12 16:04:08.936,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\Unit2\default.txvpck</Transaction>
-    <Transaction>2016/04/12 16:04:09.023,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\march18\default.txvpck</Transaction>
-    <Transaction>2016/04/12 16:05:06.600,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\Unit2\default.txaPackage</Transaction>
-    <Transaction>2016/04/12 16:19:28.807,C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\tempclass.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas</Transaction>
+    <Transaction>2016/04/12 16:02:56.000.499,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas</Transaction>
+    <Transaction>2016/04/12 16:03:56.000.455,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\default.txaPackage</Transaction>
+    <Transaction>2016/04/12 16:04:02.000.013,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\default.txvpck</Transaction>
+    <Transaction>2016/04/12 16:04:08.000.936,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\Unit2\default.txvpck</Transaction>
+    <Transaction>2016/04/12 16:04:09.000.023,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\march18\default.txvpck</Transaction>
+    <Transaction>2016/04/12 16:05:06.000.600,=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\ModelSupport_march18\Unit2\default.txaPackage</Transaction>
+    <Transaction>2016/04/12 16:19:28.000.807,C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\tempclass.pas=C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\Unit2.pas</Transaction>
+    <Transaction>2016/04/18 14:00:01.000.944,C:\Users\Oleg\Documents\RAD Studio\Projects\olimpstakes\tempclass.pas=</Transaction>
   </Transactions>
 </BorlandProject>

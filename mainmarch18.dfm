@@ -236,6 +236,15 @@ object Form1: TForm1
     TabOrder = 23
     OnClick = Button16Click
   end
+  object Button17: TButton
+    Left = 272
+    Top = 312
+    Width = 75
+    Height = 25
+    Caption = 'Button17'
+    TabOrder = 24
+    OnClick = Button17Click
+  end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer

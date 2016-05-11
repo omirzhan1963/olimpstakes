@@ -84,7 +84,6 @@
 			<DCCReference Include="checkonebetstake_module.pas"/>
 			<DCCReference Include="choicestrategy_module.pas"/>
 			<DCCReference Include="parseresult_module.pas"/>
-			<DCCReference Include="tempclass.pas"/>
 			<None Include="Profiling\AQtimeModule1.aqt"/>
 			<None Include="ModelSupport_march18\default.txaPackage"/>
 			<None Include="ModelSupport_march18\default.txvpck"/>

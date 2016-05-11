@@ -11,6 +11,14 @@ SysUtils, Classes, adodb, dm_module, globalfunc;
     function oneinteger(qstr:string):integer;
     function onereal(qstr:string):real;
     function getari(sqlstr:string):ari;
+    function onedate(sqlstr:string):tdatetime;
+    function findchamp(champ:string;id_sport:integer):integer;
+    function findsport(sport:string):integer;
+    function findcom(com:string;id_sport,id_champ:integer):integer;
+    function findevent(odate:string;id_com1,id_com2,id_champ:integer):integer;
+     function findstakegroup(stakegroup:string;id_sport:integer):integer;
+     function findstaketype(staketype:string;id_sport,id_stakegroup:integer):integer;
+
      constructor create;
   destructor destroy;override;
   class var    refcount:integer;
@@ -49,6 +57,72 @@ begin
   end;
 end;
 
+function workwithdb_class.findchamp(champ: string; id_sport: integer): integer;
+var
+sqlstr:string;
+begin
+ sqlstr:='findchamp  N'''+champ+''','+inttostr(id_sport)+';';
+ result:=oneinteger(sqlstr);
+end;
+
+function workwithdb_class.findcom(com: string;id_sport, id_champ: integer):
+ integer;
+ var
+ sqlstr:string;
+begin
+sqlstr:='findcom N'''+com+''','+inttostr(id_sport)+','+inttostr(id_champ)+';';
+result:=oneinteger(sqlstr);
+
+end;
+
+function workwithdb_class.findevent(odate: string; id_com1, id_com2,
+  id_champ: integer): integer;
+  var
+  sqlstr:string;
+begin
+ sqlstr:='findevent  N'''+odate+''','+inttostr(id_com1)+','+inttostr(id_com2)+','+inttostr(id_champ)+';';
+ result:=oneinteger(sqlstr);
+end;
+
+function workwithdb_class.findsport(sport: string): integer;
+var
+qstr:string;
+begin
+ result:=-1;
+
+qstr:='findsport N'''+sport+''';';
+ query.Close;
+query.SQL.Clear;
+query.SQL.Add(qstr);
+
+query.Active:=true;
+if query.RecordCount>0 then
+
+  result:=query.Fields.Fields[0].AsInteger;
+query.Close;
+end;
+
+function workwithdb_class.findstakegroup(stakegroup: string;
+  id_sport: integer): integer;
+ var
+  sqlstr:string;
+begin
+ sqlstr:='findstakegroup  N'''+stakegroup+''','+inttostr(id_sport)+';';
+ result:=oneinteger(sqlstr);
+
+end;
+
+function workwithdb_class.findstaketype(staketype: string; id_sport,
+  id_stakegroup: integer): integer;
+var
+  sqlstr:string;
+begin
+ sqlstr:='findstaketype  N'''+staketype+''','+inttostr(id_sport)+','+inttostr(id_stakegroup)+';';
+ result:=oneinteger(sqlstr);
+
+
+end;
+
 function workwithdb_class.getari(sqlstr: string): ari;
 var
 k:integer;
@@ -68,6 +142,19 @@ while (not query.Eof) do
   result[k]:=query.Fields.Fields[0].AsInteger;
   query.Next;
   end;
+query.Close;
+end;
+
+function workwithdb_class.onedate(sqlstr: string): tdatetime;
+begin
+ query.Close;
+query.SQL.Clear;
+query.SQL.Add(sqlstr);
+
+query.Active:=true;
+if query.RecordCount>0 then
+
+  result:=query.Fields.Fields[0].AsDateTime;
 query.Close;
 end;
 

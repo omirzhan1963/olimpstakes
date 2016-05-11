@@ -68,6 +68,11 @@ wait:tprocedure;
 
 
     end;
+     doc2=ihtmldocument2;
+icol=ihtmlelementcollection;
+iel=ihtmlelement;
+
+function isrestrictedmainchild(chel,mainel:iel):boolean;
       function isolimpdate(s:string):boolean;
   function inari(index:integer;ar:ari):boolean;
   function isdigit(c:char):boolean;
@@ -79,6 +84,31 @@ wait:tprocedure;
        const
        br:string=char(13)+char(10);
 implementation
+
+ function isrestrictedmainchild(chel,mainel:iel):boolean;
+  var
+tempel:iel;
+tname:string;
+childname,parentname:string;
+ begin
+ result:=false;
+ childname:=chel.tagName;
+  parentname:=mainel.tagName;
+ tempel:=chel.parentElement;
+  tname:=tempel.tagName;
+  while tname<>parentname do
+   begin
+   if tname='HTML' then  exit;
+   if tname=childname then exit;
+   tempel:=tempel.parentElement;
+   tname:=tempel.tagName;
+
+   end;
+   if tempel=mainel then result:=true;
+
+
+ end;
+
     function isolimpdate(s:string):boolean;
   begin
     result:=false;

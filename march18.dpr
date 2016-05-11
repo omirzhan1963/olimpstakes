@@ -27,8 +27,7 @@ uses
   checkbetstakes_module in 'checkbetstakes_module.pas',
   checkonebetstake_module in 'checkonebetstake_module.pas',
   choicestrategy_module in 'choicestrategy_module.pas',
-  parseresult_module in 'parseresult_module.pas',
-  tempclass in 'tempclass.pas';
+  parseresult_module in 'parseresult_module.pas';
 
 {$R *.res}
 

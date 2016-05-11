@@ -9,7 +9,7 @@ uses
   confirmstake_module, collectinfo_module, checkbet_module, strategy1_module,
   parselivetennis_module, insertstakelivetennis_module, navlive_module,
   navlivechamp_module, checkliveevent_module, livetennisstrategy_module,
-  strategybase_module;
+  strategybase_module, parseresult_module;
 
 type
   TForm1 = class(TForm)
@@ -38,6 +38,7 @@ type
     Button14: TButton;
     Button15: TButton;
     Button16: TButton;
+    Button17: TButton;
     procedure WebBrowser1NewWindow2(ASender: TObject; var ppDisp: IDispatch;
       var Cancel: WordBool);
     procedure Button1Click(Sender: TObject);
@@ -57,6 +58,7 @@ type
     procedure Button14Click(Sender: TObject);
     procedure Button15Click(Sender: TObject);
     procedure Button16Click(Sender: TObject);
+    procedure Button17Click(Sender: TObject);
 
   private
    incl:init_class;
@@ -211,6 +213,24 @@ begin
  strat3.preparestrategy;
  strat3.dostrategy;
 
+end;
+
+procedure TForm1.Button17Click(Sender: TObject);
+var
+pr:parseresult_class;
+s:string;
+begin
+  pr:=parseresult_class.create;
+  initcl1;
+  pr.init(incl);
+  pr.navresultpage;
+ { pr.findspch(2929);
+  s:=datetimetostr(pr.evdate);
+  edit1.Text:=s;
+  s:=inttostr(pr.id_sport);
+  edit2.Text:=s;  }
+  pr.parseresult(2929);
+  memo1.Text:=pr.test;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);

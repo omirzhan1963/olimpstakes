@@ -3,8 +3,7 @@ unit tempclass;
 interface
 
 type
-  tempclass = class
-  end;
+ 
 
   IPrototype = interface
     function Clone: IPrototype;
